@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    margin: 0;
+}  
+
+.time-slider .ngx-slider .ngx-slider-bubble {
+    color: snow !important;
+}
+
+.time-slider .ngx-slider .ngx-slider-pointer {
+    background-color: lightskyblue;
+}
+
+.time-slider .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
+    background-color: white;
+}
+
+.scale-slider .ngx-slider .ngx-slider-bubble {
+    color: snow !important;
+}
+
+.scale-slider .ngx-slider .ngx-slider-pointer {
+    background-color: lightskyblue;
+}
+
+.scale-slider .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
+    background-color: white;
+}
+
+:focus-visible {
+    outline: none;
+}
