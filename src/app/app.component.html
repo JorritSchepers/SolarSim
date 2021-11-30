@@ -2,55 +2,66 @@
 <main>
     <button id="ui-toggle-button" (click)="showUI = !showUI"></button>
     <div id="container" *ngIf="showUI"> 
-    <!-- System list -->
-    <div id="system-list-container" class = "list-container no-selec">
-        <div class="system-list-item list-item button" *ngFor="let system of systems" (click)="switchToSystem(getSystemIndex(system.name))">
-            {{system.name}}
-        </div>
-        <div class="new-button" (click)="addNewSystem()"> + </div>
-    </div>
 
-    <!-- Planet list -->
-    <div id="planet-list-container" class = "list-container no-selec">
-        <div class="planet-list-item list-item button" [ngStyle]="{'background-color': sun.color}" (click)="flyToPlanet(sun.name)">
-            {{sun.name}}
+        <!-- System list -->
+        <div id="system-list-container" class = "list-container no-selec">
+            <div class="system-list-item list-item button" *ngFor="let system of systems" (click)="switchToSystem(getSystemIndex(system.name))">
+                {{system.name}}
+            </div>
+            <div class="new-button" (click)="addNewSystem()"> + </div>
         </div>
-        <div class="planet-list-item list-item button" *ngFor="let planet of systems[currentSystem].planets" [ngStyle]="{'background-color': planet.color}" (click)="flyToPlanet(planet.name)">
-            {{planet.name}}
-        </div>
-        <div class="new-button" (click)="addNewPlanet()"> + </div>
-    </div>
 
-    <!-- Scale slider -->
-    <div id="scale-slider-container" class="no-selec">
-        <div class="scale-slider">
-            <ngx-slider [(value)]="scaleSliderValue" [options]="scaleOptions"></ngx-slider>
+        <!-- Planet list -->
+        <div id="planet-list-container" class = "list-container no-selec">
+            <div class="planet-list-item list-item button" [ngStyle]="{'background-color': sun.color}" (click)="flyToPlanet(sun.name)">
+                {{sun.name}}
+            </div>
+            <div class="planet-list-item list-item button" *ngFor="let planet of systems[currentSystem].planets" [ngStyle]="{'background-color': planet.color}" (click)="flyToPlanet(planet.name)">
+                {{planet.name}}
+            </div>
+            <div class="new-button" (click)="addRandomPlanet()"> + </div>
         </div>
-    </div>
 
-    <!-- Time slider -->
-    <div id="time-slider-container" class="no-selec">
-        <!-- <div id="time-slider-output">
-            <p id="timeSliderOutput"> {{timeRatio}} </p>
+        <!-- Scale slider -->
+        <div id="scale-slider-container" class="no-selec">
+            <div class="scale-slider">
+                <ngx-slider [(value)]="scaleSliderValue" [options]="scaleOptions"></ngx-slider>
+            </div>
+        </div>
+
+        <!-- Time slider -->
+        <div id="time-slider-container" class="no-selec">
+            <div class="time-slider">
+                <ngx-slider [(value)]="sliderValue" [options]="options"></ngx-slider>
+            </div>
+        </div>
+
+        <!-- Toggle buttons -->
+        <button class= "toggle-button button" id="guidelines-toggle-button" (click)="toggleGuideLines()"> Guide lines </button>
+        <button class= "toggle-button button" id="contact-toggle-button" (click)="toggleContactPage()"> Contact Me </button>
+
+        <!-- Info -->
+        <span id= "day-display" class="info-display no-selec"> Day: {{dayDisplay}} </span>
+        <span id= "distance-display" class="info-display no-selec"> Distance to the sun: {{distanceDisplay}}km ({{distanceInAUDisplay}}AU) </span>
+        
+        <!-- Add planet menu -->
+        <!-- <div class="menu-container" id="add-planet-menu-container" *ngIf="showAddPlanetMenu">
+
         </div> -->
-        <div class="time-slider">
-            <!-- <input type="range" min="0" max="100" value="1" class="slider" id="timeSlider"> -->
-            <ngx-slider [(value)]="sliderValue" [options]="options"></ngx-slider>
+
+        <!-- Info panel -->
+        <!-- <div class="menu-container" id="info-panel-container">
+            
+        </div> -->
+
+        <!-- Contact page -->
+        <div id=contact-container class="menu-container" *ngIf="showContactPage"> 
+            <h1 class="no-selec">Contact me</h1>
+            <p><span class="no-selec">Email:</span>&nbsp; jorrit.schepers1@gmail.com</p>
+            <a href="https://github.com/JorritSchepers" target="_blank" style="width: 7%">
+                <img class="no-selec" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2048px-Octicons-mark-github.svg.png" style="width: 100%">
+            </a>
         </div>
-    </div>
-
-    <!-- Toggle buttons -->
-    <button class= "toggle-button button" id="guidelines-toggle-button" (click)="toggleGuideLines()"> Guide lines </button>
-    
-    <!-- Add planet menu -->
-    <div class="menu-container" id="add-planet-menu-container" *ngIf="showAddPlanetMenu">
-
-    </div>
-
-    <!-- Info panel -->
-    <div class="menu-container" id="info-panel-container">
-
-    </div>
     </div>
 </main>
 

@@ -102,30 +102,13 @@
     width: 80%; 
     margin: 0;
   }
-
-  /*
-  .slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 15px;
-    border-radius: 5px;  
-    background: var(--border-color);
-    outline: none;
-  }
-  
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%; 
-    background: lightskyblue;
-    cursor: pointer;
-  } */
   
   #guidelines-toggle-button {
-    top: 90vh;
     left: 70vw;
+  }
+
+  #contact-toggle-button {
+    left: 94vw;
   }
   
   #add-planet-button {
@@ -135,6 +118,7 @@
   
   .toggle-button {
     position: absolute;
+    top: 90vh;
     width: 8vh;
     height: 8vh;
     background-color: lightskyblue;
@@ -249,4 +233,32 @@
   
   .button:active {
     opacity: 1;
+  }
+
+  .info-display {
+    color: white;
+    position: fixed;
+    left: 3vh;
+    opacity: var(--ui-base-opacity);
+  }
+
+  #day-display {
+    bottom: 4vh;
+  }
+
+  #distance-display {
+    bottom: 2vh;
+  }
+
+  #contact-container {
+    width: 50vw;
+    height: 50vh;
+    top: 25vh;
+    left: 25vw;
+    opacity: 1;
+    background-color: darkgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
