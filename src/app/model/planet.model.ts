@@ -23,6 +23,7 @@ export class Planet {
     oldX: number; oldY: number; oldZ: number;
     moons: Planet[]
     moonOf: Planet
+    sign: any;
   
     constructor(app: AppComponent, name: string, radius: number, detail: number, color: number, distance: number, inclination: number, axis: number, isStar: boolean, speed: number, clockwise: boolean, textureMap: any, moonOf: Planet) {
       this.app = app
@@ -51,7 +52,7 @@ export class Planet {
     }
   
     createGuideLine(): void {
-      let g = new THREE.TorusGeometry(this.distance, this.radius/GUIDELINE_RATIO, 10, 2000)
+      let g = new THREE.TorusGeometry(this.distance, this.radius/GUIDELINE_RATIO, 20, 2000)
       let m = new THREE.MeshBasicMaterial({
         color: this.color,
       });
@@ -77,5 +78,11 @@ export class Planet {
       const moon = new Planet(this.app, name, radius/this.app.RADIUS_RATIO, detail, color, distance/this.app.DISTANCE_RATIO, inclination, 0, isStar, speed, clockwise, textureMap, this)
       this.moons.push(moon)
       this.app.scene.add(moon.model)
+    }
+
+    getInclination(): number {
+      if (this.moonOf != null) return Math.round((this.inclination - this.moonOf.inclination)*1000)/1000
+      if (this.inclination > 180) return Math.round((this.inclination - 180)*1000)/1000
+      return this.inclination
     }
   }

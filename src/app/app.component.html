@@ -1,61 +1,122 @@
 <canvas id="bg"></canvas>
 <main>
-    <button id="ui-toggle-button" (click)="showUI = !showUI"></button>
+    <button id="ui-toggle-button" class="button" *ngIf="!showUI" (click)="showUI = !showUI"> Show UI </button>
     <div id="container" *ngIf="showUI"> 
-
-        <!-- System list -->
-        <div id="system-list-container" class = "list-container no-selec">
-            <div class="system-list-item list-item button" *ngFor="let system of systems" (click)="switchToSystem(getSystemIndex(system.name))">
-                {{system.name}}
-            </div>
-            <div class="new-button" (click)="addNewSystem()"> + </div>
+        <!-- Header -->
+        <div id="header" class="panel no-selec">
+            <span id= "distance-display"> Distance to the sun: {{distanceDisplay}}km ({{distanceInAUDisplay}}AU) </span>
+            <span id= "day-display"> Day: {{dayDisplay}} </span>
         </div>
 
-        <!-- Planet list -->
-        <div id="planet-list-container" class = "list-container no-selec">
-            <div class="planet-list-item list-item button" [ngStyle]="{'background-color': sun.color}" (click)="flyToPlanet(sun.name)">
-                {{sun.name}}
+        <!-- Navigator -->
+        <div id="nav-container" class="panel no-selec">
+            <div class="panel-title">
+                <div *ngIf="navCurrentPage != 0" (click)="navCurrentPage = navCurrentPage - 1"> &lt; </div>
+                <div *ngIf="navCurrentPage == 0"> &nbsp; </div>
+                <span *ngIf="navCurrentPage == 0">Systems</span>
+                <span *ngIf="navCurrentPage == 1">Planets</span>
+                <span *ngIf="navCurrentPage == 2 && getPlanet(followPlanetName).moonOf == null" style="font-size: large" (click)="showInfoPanel = true">Moons ({{followPlanetName}})</span>
+                <span *ngIf="navCurrentPage == 2 && getPlanet(followPlanetName).moonOf != null" style="font-size: large">Moons ({{getPlanet(followPlanetName).moonOf.name}})</span>
+                <div *ngIf="navCurrentPage == 0" (click)="addNewSystem()"> + </div>
+                <div *ngIf="navCurrentPage == 1" (click)="addRandomPlanet()"> + </div>
+                <div *ngIf="navCurrentPage == 2"> &nbsp; </div>
             </div>
-            <div class="planet-list-item list-item button" *ngFor="let planet of systems[currentSystem].planets" [ngStyle]="{'background-color': planet.color}" (click)="flyToPlanet(planet.name)">
-                {{planet.name}}
+            <div class="panel-body" style="flex-direction: column;">
+                <!-- Systems list -->
+                <div style="width: 100%; height: 100%;" *ngIf="navCurrentPage == 0">
+                    <div class="nav-list-item" *ngFor="let system of systems" (click)="switchToSystem(getSystemIndex(system.name))">
+                        <span>{{system.name}}</span>
+                    </div>
+                </div>
+
+                <!-- Planets list -->
+                <div style="width: 100%; height: 100%;" *ngIf="navCurrentPage == 1">
+                    <div class="nav-list-item" (click)="flyToPlanet(sun.name)">
+                        <span>{{sun.name}}</span>
+                    </div>
+                    <div class="nav-list-item" *ngFor="let planet of systems[currentSystem].planets" (click)="flyToPlanet(planet.name)">
+                        <span>{{planet.name}}</span>
+                    </div>
+                </div>
+
+                <!-- Moons list -->
+                <div style="width: 100%; height: 100%;" *ngIf="navCurrentPage == 2">
+                    <div style="width: 100%; height: 100%;" *ngIf="getPlanet(followPlanetName).moonOf == null">
+                        <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moons" (click)="flyToPlanet(moon.name)">
+                            <span>{{moon.name}}</span>
+                        </div>
+                    </div>
+                    <div style="width: 100%; height: 100%;" *ngIf="getPlanet(followPlanetName).moonOf != null">
+                        <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moonOf.moons" (click)="flyToPlanet(moon.name)">
+                            <span>{{moon.name}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="new-button" (click)="addRandomPlanet()"> + </div>
-        </div>
-
-        <!-- Scale slider -->
-        <div id="scale-slider-container" class="no-selec">
-            <div class="scale-slider">
-                <ngx-slider [(value)]="scaleSliderValue" [options]="scaleOptions"></ngx-slider>
-            </div>
-        </div>
-
-        <!-- Time slider -->
-        <div id="time-slider-container" class="no-selec">
-            <div class="time-slider">
-                <ngx-slider [(value)]="sliderValue" [options]="options"></ngx-slider>
-            </div>
-        </div>
-
-        <!-- Toggle buttons -->
-        <button class= "toggle-button button" id="guidelines-toggle-button" (click)="toggleGuideLines()"> Guide lines </button>
-        <button class= "toggle-button button" id="contact-toggle-button" (click)="toggleContactPage()"> Contact Me </button>
-
-        <!-- Info -->
-        <span id= "day-display" class="info-display no-selec"> Day: {{dayDisplay}} </span>
-        <span id= "distance-display" class="info-display no-selec"> Distance to the sun: {{distanceDisplay}}km ({{distanceInAUDisplay}}AU) </span>
-        
-        <!-- Add planet menu -->
-        <!-- <div class="menu-container" id="add-planet-menu-container" *ngIf="showAddPlanetMenu">
-
-        </div> -->
+        </div>    
 
         <!-- Info panel -->
-        <!-- <div class="menu-container" id="info-panel-container">
-            
-        </div> -->
+        <div id="info-container" class="panel no-selec" *ngIf="followPlanetName != null && showInfoPanel">
+            <div class="panel-title">
+                <div> &nbsp; </div>
+                <span> {{followPlanetName}} </span>
+                <div (click)="showInfoPanel = false"> x </div>
+            </div>
+            <div class="panel-body">
+                <div class="info-column" style="width: 40%;">
+                    <span> Diameter: </span>
+                    <span> Distance: </span>
+                    <span> Inclination: </span>
+                    <span> Axis: </span>
+                    <span> Orbital period: </span>
+                    <span> Direction: </span>
+                    <span *ngIf="getPlanet(followPlanetName).moonOf == null"> Moons: </span>
+                    <span *ngIf="getPlanet(followPlanetName).moonOf != null"> Is a moon of: </span>
+                </div>
+                <div class="info-column" style="width: 60%;">
+                    <span> {{getPlanet(followPlanetName).radius*2}}km </span>
+                    <span> {{getPlanet(followPlanetName).distance}}km </span>
+                    <span> {{getPlanet(followPlanetName).getInclination()}}&deg; </span>
+                    <span> {{getPlanet(followPlanetName).axis}}&deg; </span>
+                    <span> {{getPlanet(followPlanetName).speed}} days </span>
+                    <span *ngIf="getPlanet(followPlanetName).clockwise"> Clockwise </span>
+                    <span *ngIf="!getPlanet(followPlanetName).clockwise"> Counter clockwise </span>
+                    <span *ngIf="getPlanet(followPlanetName).moonOf == null"> {{getPlanet(followPlanetName).moons.length}} </span>
+                    <span *ngIf="getPlanet(followPlanetName).moonOf != null"> {{getPlanet(followPlanetName).moonOf.name}} </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button panel -->
+        <div class="panel no-selec" id="button-container">
+            <button class= "button" (click)="toggleGuideLines()" style="border-top-left-radius: var(--border-radius);"> Orbit path </button>
+            <button class= "button" *ngIf="!railedCam" (click)="railedCam = true"> Turn off free cam </button>
+            <button class= "button" *ngIf="railedCam" (click)="railedCam = false"> Turn on free cam </button>
+            <button class= "button">  </button>
+            <button class= "button">  </button>
+            <button class= "button">  </button>
+            <button class= "button">  </button>
+            <button class= "button" (click)="showContactPage = !showContactPage"> Contact </button>
+            <button class= "button" (click)="showUI = !showUI"> Hide UI </button>
+        </div>
+
+        <!-- Slider panel -->
+        <div id="slider-panel" class="panel no-selec">
+            <div id="slider-header" class="panel-title">
+                <span class="button" style="border-top-left-radius: var(--border-radius);" (click)="currentSlider = 'Time'"> Time </span>
+                <span class="button" style="border-top-right-radius: var(--border-radius);" (click)="currentSlider = 'Distance'"> Distance </span>
+            </div>
+            <div id="slider-body" class="panel-body">
+                <span> {{currentSlider}} </span>
+                <div id="slider">
+                    <ngx-slider class="asd" *ngIf="currentSlider == 'Time'" [(value)]="sliderValue" [options]="options"></ngx-slider>
+                    <ngx-slider *ngIf="currentSlider == 'Distance'" [(value)]="scaleSliderValue" [options]="scaleOptions"></ngx-slider>
+                </div>
+            </div>
+        </div>
 
         <!-- Contact page -->
-        <div id=contact-container class="menu-container" *ngIf="showContactPage"> 
+        <div id=contact-container class="panel" *ngIf="showContactPage"> 
             <h1 class="no-selec">Contact me</h1>
             <p><span class="no-selec">Email:</span>&nbsp; jorrit.schepers1@gmail.com</p>
             <a href="https://github.com/JorritSchepers" target="_blank" style="width: 7%">

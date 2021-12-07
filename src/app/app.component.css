@@ -1,264 +1,237 @@
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
-  
-  main {
-    position: absolute;
-    display: flex;
-    top: 0;
-    left: 0;
-    font-family: Arial, Helvetica, sans-serif;
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
 
-    --border-color: #d3d3d3;
-    --border-width: 8px;
-    --ui-base-opacity: 0.7;
-    --ui-hover-opacity: 0.8;
-    --margin-list-item: 10px;
-  }
-  
-  #container {
-    position: absolute;
-    display: flex;
-    top: 0;
-    left: 0;
-  }
-  
-  #time-slider-container {
-    position: absolute;
-    top: 93vh;
-    left: 30vw;
-    width: 40vw;
-    height: 7vh;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap: wrap;
-    opacity: var(--ui-base-opacity);
-  }
-  
-  #time-slider-container:hover {
-    opacity: var(--ui-hover-opacity);
-    transition: opacity .5s;
-  }
-  
-  #time-slider-container:active {
-    opacity: 1;
-    transition: opacity .5s;
-  }
+main {
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  font-family: Arial, Helvetica, sans-serif;
 
-  #scale-slider-container {
-    position: absolute;
-    top: 87vh;
-    left: 30vw;
-    width: 40vw;
-    height: 7vh;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap: wrap;
-    opacity: var(--ui-base-opacity);
-  }
+  --border-color: #d3d3d3;
+  --border-width: 8px;
   
-  #time-slider-container:hover {
-    opacity: var(--ui-hover-opacity);
-    transition: opacity .5s;
-  }
-  
-  #time-slider-container:active {
-    opacity: 1;
-    transition: opacity .5s;
-  }
-  
-  .no-selec {
-    user-select: none;
-  }
-  
-  #time-slider-output {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 1vh;
-  }
-  
-  #timeSliderOutput {
-    color: snow;
-    font-size: 3vh;
-    margin: 0;
-  }
-  
-  .time-slider-number {
-    width: 5%;
-    margin: 0;
-  }
-  
-  .time-slider {
-    width: 80%; 
-    margin: 0;
-  }
+  --ui-hover-opacity: 0.8;
+  --margin-list-item: 10px;
 
-  .scale-slider {
-    width: 80%; 
-    margin: 0;
-  }
-  
-  #guidelines-toggle-button {
-    left: 70vw;
-  }
+  --border-radius: 20px;
+  --ui-base-opacity: 0.9;
+  --bg-color: #333333;
+  --hl-color: #aaffff;
+}
 
-  #contact-toggle-button {
-    left: 94vw;
-  }
-  
-  #add-planet-button {
-    top: 90vh;
-    left: 77vw;
-  }
-  
-  .toggle-button {
-    position: absolute;
-    top: 90vh;
-    width: 8vh;
-    height: 8vh;
-    background-color: lightskyblue;
-  }
-  
-  #ui-toggle-button {
-    position: absolute;
-    width: 4vh;
-    height: 4vh;
-    border-radius: 4vh;
-    background-color: var(--border-color);
-    border: 0;
-    top: 2vh;
-    left: calc(100vw - 6vh);
-    transition: opacity .5s;
-    opacity: var(--ui-base-opacity);
-  }
-  
-  .toggle-button:hover {
-    transition: opacity .5s;
-    opacity: var(--ui-hover-opacity);
-  }
-  
-  .menu-container {
-    background-color: lightskyblue;
-    opacity: var(--ui-base-opacity);
-    border-radius: 40px;
-    border: var(--border-width) solid var(--border-color);
-    position: absolute;
-  }
-  
-  #add-planet-menu-container {
-    width: 30vw;
-    height: 70vh;
-    top: 15vh;
-    left: 66vw;
-    display: flex;
-  }
-  
-  #info-panel-container {
-    width: 30vw;
-    height: 70vh;
-    top: 15vh;
-    left: 4vw;
-    display: none;
-  }
-  
-  .list-container {
-    width: 94vw;
-    height: 4vh;
-    position: absolute;
-    left: calc(2vh - var(--margin-list-item));
-    display: flex;
-    align-items: center;
-  }
-  
-  .list-item {
-    width: 150px;
-    height: 100%;
-    margin: var(--margin-list-item);
-  }
-  
-  #system-list-container {
-    top : 2vh;
-  }
-  
-  .system-list-item {
-    background-color: rgb(119, 119, 119);
-  }
-  
-  #planet-list-container {
-    top: 10vh; 
-  }
-  
-  .new-button {
-    margin: var(--margin-list-item);
-    background-color: var(--border-color);
-    height: calc(4vh + var(--border-width));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: calc(4vh + var(--border-width));
-    border-radius: calc(4vh + var(--border-width) / 2);
-    opacity: var(--ui-base-opacity);
-    transition: opacity .5s;
-  }
-  
-  .new-button:hover {
-    transition: opacity .5s;
-    opacity: var(--ui-hover-opacity);
-  }
-  
-  .new-button:active {
-    opacity: 1;
-  }
-  
-  .button {
-    border-radius: 40px;
-    border: var(--border-width) solid var(--border-color);
-    transition: opacity .5s;
-    opacity: var(--ui-base-opacity);  
-    color: snow;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .button:hover {
-    transition: opacity .5s;
-    opacity: var(--ui-hover-opacity);
-  }
-  
-  .button:active {
-    opacity: 1;
-  }
+#container {
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  opacity: var(--ui-base-opacity);
+}
 
-  .info-display {
-    color: white;
-    position: fixed;
-    left: 3vh;
-    opacity: var(--ui-base-opacity);
-  }
+.no-selec {
+  user-select: none;
+}
+/*============================================================================================================== General */
 
-  #day-display {
-    bottom: 4vh;
-  }
+#contact-container {
+  width: 56vw;
+  height: 72vh;
+  top: 14vh;
+  left: 22vw;
+  justify-content: center;
+  opacity: 1;
+  border-radius: var(--border-radius);
+}
+/*========================================================================================================= Contact Page */
 
-  #distance-display {
-    bottom: 2vh;
-  }
+.panel {
+  position: absolute;
+  background-color: var(--bg-color);
+  color: snow;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0px 5px 7px #151515;
+}
 
-  #contact-container {
-    width: 50vw;
-    height: 50vh;
-    top: 25vh;
-    left: 25vw;
-    opacity: 1;
-    background-color: darkgray;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
+.panel-title {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: x-large;
+  border-bottom: 2px solid snow;
+}
+
+.panel-body {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  overflow: auto;
+}
+
+.panel-title span {
+  width: 66%;
+  display: flex;
+  justify-content: center;
+}
+
+.panel-title div {
+  width: 17%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.panel-title div:hover {
+  font-size: larger;
+}
+/*================================================================================================================ Panel */
+
+#nav-container {
+  width: 20vw;
+  min-width: 250px;
+  height: 60vh;
+  top: 20vh;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.nav-list-item {
+  width: calc(20vw - 4px);
+  height: 8%;
+  display: flex;
+  align-items: center;
+}
+
+.nav-list-item span {
+  margin-left: 1vw;
+}
+
+.nav-list-item:hover {
+  color: var(--hl-color);
+  border: 2px solid cyan;
+  text-shadow: 1px 1px 1px darkcyan;
+  font-size: large;
+}
+/*============================================================================================================ Navigator */
+
+#info-container {
+  width: 20vw;
+  min-width: 300px;
+  height: 60vh;
+  top: 20vh;
+  left: 80vw;
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.info-column {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-column span {
+  margin-left: 10%;
+  height: 6%;
+  display: flex;
+  align-items: center;
+}
+/*=========================================================================================================== Info Panel */
+
+#button-container {
+  width: 20vw;
+  min-width: 300px;
+  height: 18vh;
+  top: 82vh;
+  left: 80vw;
+  border-top-left-radius: var(--border-radius);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+}
+
+.button {
+  --button-size: 4.5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--button-size);
+  height: var(--button-size);
+  background-color: #222222;
+  color: snow;
+  border: none;
+}
+
+.button:hover {
+  color: var(--hl-color);
+  border: 2px solid cyan;
+  text-shadow: 1px 1px 2px darkcyan;
+}
+
+#ui-toggle-button {
+  position: absolute;
+  background-color: var(--bg-color);
+  width: 6vw;
+  height: 4vh;
+  border-radius: 2vh;
+  top: 94vh;
+  left: calc(100vw - 2vh - 6vw);
+  opacity: var(--ui-base-opacity);
+}
+/*========================================================================================================= Button Panel */
+
+#header {
+  left: 38vw;
+  width: 24vw;
+  height: 5vh;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  display: flex;
+}
+
+#header span {
+  margin-top: 3px;
+}
+/*=============================================================================================================== Header */
+
+#slider-panel {
+  width: 30vw;
+  height: 12vh;
+  left: 35vw;
+  top: 88vh;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+#slider-header {
+  height: 30%;
+  font-size: medium;
+  border: none;
+}
+
+#slider-header span {
+  height: 100%;
+}
+
+#slider-body {
+  flex-direction: column;
+  align-items: center;
+}
+
+#slider-body span {
+  margin-top: 7px;
+}
+
+#slider {
+  width: 90%;
+}
+/*========================================================================================================= Slider Panel */

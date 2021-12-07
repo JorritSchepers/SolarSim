@@ -48,6 +48,7 @@ export class AppComponent {
   showUI: boolean = true;
   showAddPlanetMenu: boolean = false;
   showContactPage: boolean = false;
+  showInfoPanel: boolean = true;
   
   currentSystem: number = 0;
   systems = [new Solarsystem("The Solar System")];
@@ -60,6 +61,10 @@ export class AppComponent {
   dayDisplay = 0
   distanceDisplay = 0;
   distanceInAUDisplay = 0;
+  navCurrentPage = 1; // 0=Systems, 1=Planets, 2=Moons
+  currentSlider: string = "Time"
+
+  railedCam: boolean = false;
 
   sun: Planet;
 
@@ -72,7 +77,7 @@ export class AppComponent {
   scaleSliderValue: number = 1;
   scaleOptions: Options = {
     floor: 0.015,
-    ceil: 1,
+    ceil: 2,
     step: 0.001
   };
 
@@ -87,36 +92,36 @@ export class AppComponent {
   }
 
   initTheSolarSystem(): void {
-    const lunaTextureMap = new THREE.TextureLoader().load('./assets/moon-map.jpg')
+    const moonTextureMap = new THREE.TextureLoader().load('./assets/moon-map.jpg')
     this.sun = this.addPlanet('Sun', SUN_RADIUS/this.SUN_RADIUS_RATIO, 40, 0xAAAA00, 0, 0, 0, true, 0, null, new THREE.TextureLoader().load('./assets/sun-map.jpg'));
     this.addPlanet('Mercury', 2440, 20, 0x777777, 57910000, 3.38, 2, false, 88, false, new THREE.TextureLoader().load('./assets/mercury-map.jpg'));
     this.addPlanet('Venus', 6052, 20, 0x7A381C, 108200000, 3.86, 2.7, false, 225, true, new THREE.TextureLoader().load('./assets/venus-map.jpg'));
     let earth = this.addPlanet('Earth', 6371, 20, 0x243E49, 149600000, 7.155, 23.4, false, 365, false, new THREE.TextureLoader().load('./assets/earth-map2.jpg'));
-    earth.addMoon('Luna', 1737, 20, 0x777777, 384400, 5.14, false, 27, true, lunaTextureMap)
+    earth.addMoon('Moon', 1737, 20, 0x777777, 384400, 5.14, false, 27, true, moonTextureMap)
     let mars = this.addPlanet('Mars', 3390, 20, 0xAC6349, 227900000, 5.65, 25, false, 687, false, new THREE.TextureLoader().load('./assets/mars-map.jpg'));
-    mars.addMoon("Phobos", 11.1, 20, 0x777777, 9377, 1.093, false, 0.463, true, lunaTextureMap)
-    mars.addMoon("Deimons", 6.3, 20, 0x777777, 23460, 0.93, false, 5.44, true, lunaTextureMap)
+    mars.addMoon("Phobos", 11.1, 20, 0x777777, 9377, 1.093, false, 0.463, true, moonTextureMap)
+    mars.addMoon("Deimons", 6.3, 20, 0x777777, 23460, 0.93, false, 5.44, true, moonTextureMap)
     let jupiter = this.addPlanet('Jupiter', 69911, 20, 0x9F8E7A, 778500000, 6.09, 3, false, 4332, false, new THREE.TextureLoader().load('./assets/jupiter-map.jpg'));
     jupiter.addMoon('Ganymede', 5268/2, 20, 0x999999, 1070412, 0.204, false, 7.1546, false, new THREE.TextureLoader().load('./assets/moon-map.jpg'))
     jupiter.addMoon('Callisto', 4820/2, 20, 0x555555, 1882709, 0.205, false, 16.689, false, new THREE.TextureLoader().load('./assets/moon-map.jpg'))
     jupiter.addMoon('Io', 3643/2, 20, 0xD0C757, 421700, 0.050, false, 1.7691, false, new THREE.TextureLoader().load('./assets/moon-map.jpg'))
     jupiter.addMoon('Europa', 3121/2, 20, 0x856033, 671034, 0.471, false, 3.5512, false, new THREE.TextureLoader().load('./assets/moon-map.jpg'))
     let saturn = this.addPlanet('Saturn', 58232, 20, 0xB2915F, 1434000000, 5.51, 26.73, false, 10757, false, new THREE.TextureLoader().load('./assets/saturn-map.jpg'));
-    saturn.addMoon("Titan", 5149/2, 20, 0x777777, 1221870, 0.349, false, 16, true, lunaTextureMap)
-    saturn.addMoon("Rhea", 1527/2, 20, 0x777777, 527108, 0.327, false, 4.5, true, lunaTextureMap)
-    saturn.addMoon("Lapetus", 1470/2, 20, 0x777777, 3560820, 15.470, false, 79, true, lunaTextureMap)
-    saturn.addMoon("Dione", 1123/2, 20, 0x777777, 377396, 0.002, false, 2.7, true, lunaTextureMap)
-    saturn.addMoon("Tethys", 1062/2, 20, 0x777777, 294619, 0.168, false, 1.9, true, lunaTextureMap)
-    saturn.addMoon("Enceladus", 504/2, 20, 0x777777, 237948, 0.010, false, 1.4, true, lunaTextureMap)
-    saturn.addMoon("Mimas", 396/2, 20, 0x777777, 185539, 1.566, false, 0.9, true, lunaTextureMap)
+    saturn.addMoon("Titan", 5149/2, 20, 0x777777, 1221870, 0.349, false, 16, true, moonTextureMap)
+    saturn.addMoon("Rhea", 1527/2, 20, 0x777777, 527108, 0.327, false, 4.5, true, moonTextureMap)
+    saturn.addMoon("Lapetus", 1470/2, 20, 0x777777, 3560820, 15.470, false, 79, true, moonTextureMap)
+    saturn.addMoon("Dione", 1123/2, 20, 0x777777, 377396, 0.002, false, 2.7, true, moonTextureMap)
+    saturn.addMoon("Tethys", 1062/2, 20, 0x777777, 294619, 0.168, false, 1.9, true, moonTextureMap)
+    saturn.addMoon("Enceladus", 504/2, 20, 0x777777, 237948, 0.010, false, 1.4, true, moonTextureMap)
+    saturn.addMoon("Mimas", 396/2, 20, 0x777777, 185539, 1.566, false, 0.9, true, moonTextureMap)
     let uranus = this.addPlanet('Uranus', 25362, 20, 0x8EB2C4, 2871000000, 6.48, 97.77, false, 30687, false, new THREE.TextureLoader().load('./assets/uranus-map.jpg'));
-    uranus.addMoon("Titania", 1576/2, 20, 0x777777, 435910, 0.340, false, 8.7, true, lunaTextureMap)
-    uranus.addMoon("Oberon", 1522/2, 20, 0x777777, 583520, 0.058, false, 13.4, true, lunaTextureMap)
-    uranus.addMoon("Umbriel", 1169/2, 20, 0x777777, 266300, 0.205, false, 4.1, true, lunaTextureMap)
-    uranus.addMoon("Ariel", 1157/2, 20, 0x777777, 191020, 0.260, false, 2.5, true, lunaTextureMap)
-    uranus.addMoon("Miranda", 471/2, 20, 0x777777, 129390, 4.232, false, 1.4, true, lunaTextureMap)
+    uranus.addMoon("Titania", 1576/2, 20, 0x777777, 435910, 0.340, false, 8.7, true, moonTextureMap)
+    uranus.addMoon("Oberon", 1522/2, 20, 0x777777, 583520, 0.058, false, 13.4, true, moonTextureMap)
+    uranus.addMoon("Umbriel", 1169/2, 20, 0x777777, 266300, 0.205, false, 4.1, true, moonTextureMap)
+    uranus.addMoon("Ariel", 1157/2, 20, 0x777777, 191020, 0.260, false, 2.5, true, moonTextureMap)
+    uranus.addMoon("Miranda", 471/2, 20, 0x777777, 129390, 4.232, false, 1.4, true, moonTextureMap)
     let neptune = this.addPlanet('Neptune', 24622, 20, 0x4662F6, 4495000000, 6.43, 28, false, 60190, false, new THREE.TextureLoader().load('./assets/neptune-map.jpg'));
-    neptune.addMoon("Triton", 2705/2, 20, 0x777777, 354759, 180-156.865, false, 5.8, true, lunaTextureMap)
+    neptune.addMoon("Triton", 2705/2, 20, 0x777777, 354759, 180-156.865, false, 5.8, true, moonTextureMap)
   }
 
   applyScaleIfWanted(boolean: boolean): void {
@@ -124,7 +129,7 @@ export class AppComponent {
       this.RADIUS_RATIO = 10; // 10
       this.DISTANCE_RATIO = 8000; // 8000
       this.SUN_RADIUS_RATIO = 20; // 20
-      this.cameraPos = [0, 18000, 52000] // X, Y, Z // 0, 18k, 52k
+      this.cameraPos = [0, 18000, 52000] // 0, 18k, 52k
     }
   }
 
@@ -157,7 +162,7 @@ export class AppComponent {
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     let app = this
     var animate = function () {
-      app.day += (app.timeRatio / 20);
+      app.day += (app.timeRatio / 120);
       app.dayDisplay = Math.floor(app.day - app.startDay);
       app.distanceInAUDisplay = Math.round(app.distanceDisplay / 149600)/1000;
       app.distanceDisplay = app.getCameraDistance();
@@ -202,36 +207,37 @@ export class AppComponent {
   addRandomPlanet(): void {
     for (let index = 0; index < 1; index++) {
       const map = new THREE.TextureLoader().load('./assets/' + PLANET_MAPS[Math.floor(Math.random() * PLANET_MAPS.length)])
-      const lunaMap = new THREE.TextureLoader().load('./assets/moon-map.jpg')
-      const randomRadius = 50000 + (Math.random() * 100000)
+      const moonMap = new THREE.TextureLoader().load('./assets/moon-map.jpg')
+      const randomRadius = Math.round(50000 + (Math.random() * 100000))
       const planetName = 'New Planet ' + this.planetCounter
       const planet = this.addPlanet(
         planetName, //name
         randomRadius, //radius
         20, //detail
         0xff00ff, // color
-        10000000 + (Math.random() * 20000000), // distance
-        Math.random() * 30, // inclination
-        Math.random() * 30, // Axis
+        Math.round(10000000 + (Math.random() * 20000000)), // distance
+        Math.round(Math.random() * 30*100)/100, // inclination
+        Math.round(Math.random() * 30*100)/100, // Axis
         false, // isstar
-        200 + (Math.random() * 1000), // speed
+        Math.round(200 + (Math.random() * 1000)), // speed
         false, // clockwise
         map // texture map
       );  
       let moonCounter = 1;
       for (let i = 0; i < Math.floor(Math.random() * 6); i++) {
         planet.addMoon(
-          'Moon ' + this.planetCounter + " of " + planetName, //name
-          (randomRadius / 20) + (Math.random() * randomRadius / 8), //radius
+          'Moon ' + moonCounter + " of " + planetName, //name
+          Math.round((randomRadius / 20) + (Math.random() * randomRadius / 8)), //radius
           20, //detail
           0x777777, // color
-          (randomRadius * 6) + (Math.random() * randomRadius * 20), // distance
-          Math.random() * 20, // inclination
+          Math.round((randomRadius * 6) + (Math.random() * randomRadius * 20)), // distance
+          Math.round(Math.random() * 20*100)/100, // inclination
           false, // isstar
-          20 + (Math.random() * 40), // speed
+          Math.round(20 + (Math.random() * 40)), // speed
           false, // clockwise
-          lunaMap // texture map
+          moonMap // texture map
         )   
+        moonCounter++;
       }
       this.planetCounter++;
       this.flyToPlanet(planetName)
@@ -250,6 +256,7 @@ export class AppComponent {
   }
 
   switchToSystem(systemIndex: number):  void {
+    this.navCurrentPage = 1;
     this.removeAllPlanetsFromScene()
     this.flyToPlanet(this.sun.name)
     this.currentSystem = systemIndex
@@ -332,7 +339,7 @@ export class AppComponent {
         planet.model.position.set(
           planet.moonOf.model.position.x + Math.sin(planet.angle/180*Math.PI) * ratio * planet.distance,
           planet.moonOf.model.position.y + Math.sin(planet.angle/180*Math.PI) * planet.distance * Math.sin(planet.inclination/180*Math.PI),
-          planet.moonOf.model.position.z + Math.cos(planet.angle/180*Math.PI) * ratio * planet.distance
+          planet.moonOf.model.position.z + Math.cos(planet.angle/180*Math.PI) * planet.distance
         )
       } else {
         planet.model.position.set(
@@ -368,11 +375,6 @@ export class AppComponent {
       }
     }
     this.useGuideLines = !this.useGuideLines
-    console.log(this.useGuideLines)
-  }
-
-  toggleContactPage(): void {
-    this.showContactPage = !this.showContactPage
   }
 
   flyToPlanet(planetName: string): void {
@@ -385,8 +387,14 @@ export class AppComponent {
       this.camera.position.set(this.cameraPos[0], this.cameraPos[1], this.cameraPos[2])
       return;
     } 
+    this.showInfoPanel = true;
+    if (this.followPlanetName == planetName) return;
     this.followPlanetName = planetName
     this.cameraMoving = true;
+    const planet = this.getPlanet(planetName)
+    if (planet.moons.length > 0) {
+      this.navCurrentPage = 2;
+    }
   }
 
   moveCameraToPlanet(): void {
@@ -394,6 +402,10 @@ export class AppComponent {
     let planet = this.getPlanet(this.followPlanetName)
     let distance = planet.radius * 5
     let ratio = (planet.distance - distance) / planet.distance
+    
+    if (planet.moonOf != null) {
+      ratio = (planet.moonOf.distance - distance) / planet.moonOf.distance
+    }
     let destination = [planet.model.position.x * ratio, planet.model.position.y, planet.model.position.z * ratio]
   
     this.timeRatio = 0;
@@ -412,14 +424,20 @@ export class AppComponent {
 
   followPlanet(name: string): void {
     let planet = this.getPlanet(name)
-  
-    this.controls.target.x = planet.model.position.x;
-    this.controls.target.y = planet.model.position.y;
-    this.controls.target.z = planet.model.position.z;
-  
-    this.camera.position.x += planet.model.position.x - planet.oldX;
-    this.camera.position.y += planet.model.position.y - planet.oldY;
-    this.camera.position.z += planet.model.position.z - planet.oldZ;
+    let ratio = (planet.distance - planet.radius*5) / planet.distance
+    if (planet.moonOf != null) {
+      ratio = (planet.moonOf.distance - planet.radius*5) / planet.moonOf.distance
+    }
+
+    this.controls.target.set(planet.model.position.x, planet.model.position.y, planet.model.position.z)
+
+    if (this.railedCam) {
+      this.camera.position.set(planet.model.position.x * ratio, planet.model.position.y * ratio, planet.model.position.z * ratio);
+    } else {
+      this.camera.position.x += planet.model.position.x - planet.oldX;
+      this.camera.position.y += planet.model.position.y - planet.oldY;
+      this.camera.position.z += planet.model.position.z - planet.oldZ;
+    }
   }
 
   getPlanet(name: string): Planet {
@@ -432,5 +450,9 @@ export class AppComponent {
         return planet.moons[j]; 
       }
     }
+  }
+
+  setInfoPanel(state: boolean): void {
+    this.showInfoPanel = state;
   }
 }
