@@ -94,7 +94,6 @@ main {
 
 #nav-container {
   width: 20vw;
-  min-width: 250px;
   height: 60vh;
   top: 20vh;
   border-top-right-radius: var(--border-radius);
@@ -122,7 +121,6 @@ main {
 
 #info-container {
   width: 20vw;
-  min-width: 300px;
   height: 60vh;
   top: 20vh;
   left: 80vw;
@@ -147,7 +145,6 @@ main {
 
 #button-container {
   width: 20vw;
-  min-width: 300px;
   height: 18vh;
   top: 82vh;
   left: 80vw;
@@ -165,7 +162,7 @@ main {
   justify-content: center;
   align-items: center;
   width: var(--button-size);
-  height: var(--button-size);
+  height: calc(calc(18vh - 2vw) / 2);
   background-color: #222222;
   color: snow;
   border: none;
@@ -192,22 +189,22 @@ main {
 #header {
   left: 38vw;
   width: 24vw;
-  height: 5vh;
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
   display: flex;
 }
 
 #header span {
-  margin-top: 3px;
+  /* margin-top: 3px; */
+  padding: 3px;
 }
 /*=============================================================================================================== Header */
 
 #slider-panel {
   width: 30vw;
-  height: 12vh;
+  height: 13vh;
   left: 35vw;
-  top: 88vh;
+  top: 87vh;
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
 }
