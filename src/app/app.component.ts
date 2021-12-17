@@ -49,6 +49,7 @@ export class AppComponent {
   showAddPlanetMenu: boolean = false;
   showContactPage: boolean = false;
   showInfoPanel: boolean = true;
+  showNav: boolean = true;
   
   currentSystem: number = 0;
   systems = [new Solarsystem("The Solar System")];
@@ -81,6 +82,8 @@ export class AppComponent {
     step: 0.001
   };
 
+  mobile: boolean = false;
+
   constructor() {
     this.setup() 
   }
@@ -89,6 +92,10 @@ export class AppComponent {
     this.applyScaleIfWanted(SCALE_RATIOS)
     this.initThree()
     this.initTheSolarSystem()
+    if (window.innerWidth < 768) {
+      this.mobile = true;
+      this.showInfoPanel = false;
+    }
   }
 
   initTheSolarSystem(): void {
@@ -387,8 +394,9 @@ export class AppComponent {
       this.camera.position.set(this.cameraPos[0], this.cameraPos[1], this.cameraPos[2])
       return;
     } 
-    this.showInfoPanel = true;
+    if (!this.mobile) this.showInfoPanel = true;
     if (this.followPlanetName == planetName) return;
+    if (this.getPlanet(planetName).moons.length == 0 && this.mobile) this.showNav = false;
     this.followPlanetName = planetName
     this.cameraMoving = true;
     const planet = this.getPlanet(planetName)
@@ -454,5 +462,15 @@ export class AppComponent {
 
   setInfoPanel(state: boolean): void {
     this.showInfoPanel = state;
+  }
+
+  showInfo() {
+    this.showInfoPanel = !this.showInfoPanel; 
+    if (this.mobile) this.showNav = false;
+  }
+
+  showContact(): void {
+    this.showContactPage = !this.showContactPage;
+    if (this.mobile) this.showNav = false;
   }
 }

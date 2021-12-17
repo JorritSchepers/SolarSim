@@ -9,7 +9,13 @@
         </div>
 
         <!-- Navigator -->
-        <div id="nav-container" class="panel no-selec">
+        <div class="nav-button panel no-selec" id="nav-open" (click)="showNav = true; showContactPage = false; showInfoPanel = false;" *ngIf="!showNav">
+            <div>&#x25B2;</div>
+        </div>
+        <div class="nav-button panel no-selec" id="nav-close" (click)="showNav = false" *ngIf="showNav">
+            <div>&#x25BC;</div>
+        </div>
+        <div id="nav-container" class="panel no-selec" *ngIf="showNav">
             <div class="panel-title">
                 <div *ngIf="navCurrentPage != 0" (click)="navCurrentPage = navCurrentPage - 1"> &lt; </div>
                 <div *ngIf="navCurrentPage == 0"> &nbsp; </div>
@@ -89,22 +95,22 @@
 
         <!-- Button panel -->
         <div class="panel no-selec" id="button-container">
-            <button class= "button" (click)="toggleGuideLines()" style="border-top-left-radius: var(--border-radius);"> Orbit path </button>
+            <button class= "button" (click)="toggleGuideLines()"> Orbit path </button>
             <button class= "button" *ngIf="!railedCam" (click)="railedCam = true"> Turn off free cam </button>
             <button class= "button" *ngIf="railedCam" (click)="railedCam = false"> Turn on free cam </button>
+            <button class= "button" (click)="showInfo()"> Planet info </button>
             <button class= "button">  </button>
             <button class= "button">  </button>
             <button class= "button">  </button>
-            <button class= "button">  </button>
-            <button class= "button" (click)="showContactPage = !showContactPage"> Contact </button>
+            <button class= "button" (click)="showContact()"> Contact </button>
             <button class= "button" (click)="showUI = !showUI"> Hide UI </button>
         </div>
 
         <!-- Slider panel -->
         <div id="slider-panel" class="panel no-selec">
             <div id="slider-header" class="panel-title">
-                <span class="button" style="border-top-left-radius: var(--border-radius);" (click)="currentSlider = 'Time'"> Time </span>
-                <span class="button" style="border-top-right-radius: var(--border-radius);" (click)="currentSlider = 'Distance'"> Distance </span>
+                <span class="button" (click)="currentSlider = 'Time'"> Time </span>
+                <span class="button" (click)="currentSlider = 'Distance'"> Distance </span>
             </div>
             <div id="slider-body" class="panel-body">
                 <span> {{currentSlider}} </span>

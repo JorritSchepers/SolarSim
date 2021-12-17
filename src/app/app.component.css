@@ -42,8 +42,14 @@ main {
   top: 14vh;
   left: 22vw;
   justify-content: center;
-  opacity: 1;
   border-radius: var(--border-radius);
+}
+
+@media only screen and (max-width: 768px) {
+  #contact-container {
+    width: 90vw;
+    left: 5vw;
+  }
 }
 /*========================================================================================================= Contact Page */
 
@@ -117,6 +123,67 @@ main {
   text-shadow: 1px 1px 1px darkcyan;
   font-size: large;
 }
+
+.nav-button {
+  display: none;
+  width: 30vw;
+  align-items: center;
+  justify-content: center;
+  height: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  left: 35vw;
+  font-size: large;
+}
+
+#nav-open {
+  top: calc(90vh - var(--border-radius));
+}
+
+#nav-close {
+  top: calc(90vh - 60vh - var(--border-radius));
+}
+
+@media only screen and (max-width: 768px) {
+  @keyframes navContainerShow {
+    from {
+      top: 90vh;
+    }
+    to {
+      top: 30vh;
+    }
+  }
+
+  @keyframes navCloseShow {
+    from {
+      top: calc(90vh - var(--border-radius));
+    }
+    to {
+      top: calc(90vh - 60vh - var(--border-radius));
+    }
+  }
+
+  #nav-container { 
+    width: 100vw;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: var(--border-radius);
+    top: 30vh;
+    animation: navContainerShow 0.3s;
+    border-bottom: 100vh solid var(--bg-color)
+  }
+
+  .nav-list-item {
+    width: calc(100vw - 4px);
+  }
+
+  .nav-button {
+    display: flex;
+  }
+
+  #nav-close {
+    animation: navCloseShow 0.3s;
+  }
+}
 /*============================================================================================================ Navigator */
 
 #info-container {
@@ -141,6 +208,15 @@ main {
   display: flex;
   align-items: center;
 }
+
+@media only screen and (max-width: 768px) {
+  #info-container {
+    width: 100vw;
+    left: 0;
+    border-radius: var(--border-radius);
+  }
+}
+
 /*=========================================================================================================== Info Panel */
 
 #button-container {
@@ -174,6 +250,10 @@ main {
   text-shadow: 1px 1px 2px darkcyan;
 }
 
+#button-container .button:first-child {
+  border-top-left-radius: var(--border-radius);
+}
+
 #ui-toggle-button {
   position: absolute;
   background-color: var(--bg-color);
@@ -183,6 +263,37 @@ main {
   top: 94vh;
   left: calc(100vw - 2vh - 6vw);
   opacity: var(--ui-base-opacity);
+}
+
+@media only screen and (max-width: 768px) {
+  #button-container {
+    width: 100vw;
+    left: 0;
+    height: 10vh;
+    border-radius: 0;
+    top: 90vh;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+  }
+
+  .button {
+    width: 12%;
+    height: 90%;
+  }
+
+  #button-container .button:first-child {
+    border-bottom-left-radius: var(--border-radius);
+  }
+
+  #button-container .button:last-child {
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+  }
+
+  #ui-toggle-button {
+    width: 20vw;
+    left: calc(100vw - 20vw - 2vh);
+  }
 }
 /*========================================================================================================= Button Panel */
 
@@ -195,8 +306,14 @@ main {
 }
 
 #header span {
-  /* margin-top: 3px; */
   padding: 3px;
+}
+
+@media only screen and (max-width: 768px) {
+  #header {
+    width: 100vw;
+    left: 0;
+  }
 }
 /*=============================================================================================================== Header */
 
@@ -219,6 +336,14 @@ main {
   height: 100%;
 }
 
+#slider-header span:first-child {
+  border-top-left-radius: var(--border-radius);
+}
+
+#slider-header span:last-child {
+  border-top-right-radius: var(--border-radius);
+}
+
 #slider-body {
   flex-direction: column;
   align-items: center;
@@ -230,5 +355,15 @@ main {
 
 #slider {
   width: 90%;
+}
+
+@media only screen and (max-width: 768px) {
+  #slider-panel {
+    display: none;
+    /* width: 100vw;
+    left: 0;
+    top: 60vh;
+    border-radius: var(--border-radius); */
+  }
 }
 /*========================================================================================================= Slider Panel */
