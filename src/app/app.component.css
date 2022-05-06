@@ -11,16 +11,14 @@ main {
   left: 0;
   font-family: Arial, Helvetica, sans-serif;
 
-  --border-color: #d3d3d3;
-  --border-width: 8px;
-  
-  --ui-hover-opacity: 0.8;
-  --margin-list-item: 10px;
-
   --border-radius: 20px;
-  --ui-base-opacity: 0.9;
-  --bg-color: #333333;
+  --ui-base-opacity: 0.95;
+  --bg-color: #272727;
+  --button-bg-color: #191919;
   --hl-color: #aaffff;
+
+  --nav-height: 60vh;
+  --nav-width: 20vw;
 }
 
 #container {
@@ -99,11 +97,12 @@ main {
 /*================================================================================================================ Panel */
 
 #nav-container {
-  width: 20vw;
-  height: 60vh;
+  width: var(--nav-width);
+  height: var(--nav-height);
   top: 20vh;
   border-top-right-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
+  z-index: 5;
 }
 
 .nav-list-item {
@@ -186,6 +185,80 @@ main {
 }
 /*============================================================================================================ Navigator */
 
+#planetbuilder-container {
+  height: var(--nav-height);
+  width: 40vw;
+  top: calc((100vh - var(--nav-height)) / 2);
+  left: calc(var(--nav-width) - var(--border-radius));
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  border-left: var(--border-radius) solid var(--bg-color);
+}
+
+#planetbuilder-container .panel-body {
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.planetbuilder-column {
+  height: 80%;
+}
+ 
+.planetbuilder-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 12.5%;
+}
+
+.planetbuilder-item ngx-slider {
+  width: 90%;
+}
+
+.planetbuilder-item button {
+  height: calc(var(--border-radius)*2);
+  width: 45%;
+}
+
+.planetbuilder-item button:first-child {
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.planetbuilder-item button:last-child {
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+#planetbuilder-buttons {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#planetbuilder-buttons button {
+  height: calc(var(--border-radius)*2);
+  width: 30%;
+  margin-left: 10%;
+  margin-right: 10%;
+  border-radius: var(--border-radius);
+}
+
+.planetbuilder-item input {
+  background: #aaa;
+  height: calc(var(--border-radius)*2);
+  border-radius: var(--border-radius);
+  border: none;
+  width: 50%;
+}
+
+.planetbuilder-item input:hover {
+  background: #ccc;
+}
+/*======================================================================================================= Planet Builder */
+
 #info-container {
   width: 20vw;
   height: 60vh;
@@ -239,15 +312,21 @@ main {
   align-items: center;
   width: var(--button-size);
   height: calc(calc(18vh - 2vw) / 2);
-  background-color: #222222;
+  background-color: var(--button-bg-color);
   color: snow;
   border: none;
+  box-shadow: 0px 5px 7px #151515;
 }
 
 .button:hover {
   color: var(--hl-color);
   border: 2px solid cyan;
   text-shadow: 1px 1px 2px darkcyan;
+}
+
+.button-active {
+  background-image: linear-gradient(to top, var(--button-bg-color), cyan 0%, var(--button-bg-color) 80%);
+  box-shadow: 0px 5px 7px darkcyan;
 }
 
 #button-container .button:first-child {
@@ -263,6 +342,7 @@ main {
   top: 94vh;
   left: calc(100vw - 2vh - 6vw);
   opacity: var(--ui-base-opacity);
+  box-shadow: 0px 5px 7px #151515;
 }
 
 @media only screen and (max-width: 768px) {
@@ -298,15 +378,31 @@ main {
 /*========================================================================================================= Button Panel */
 
 #header {
-  left: 38vw;
-  width: 24vw;
-  border-bottom-left-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
+  /* left: 38vw; */
+  width: 100vw; /* 24vw */
+  height: 4vh;
+  /* border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius); */
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  z-index: 10;
 }
 
-#header span {
-  padding: 3px;
+#header div {
+  width: calc(100vw / 3);
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+  justify-content: center;
+}
+
+#header div:first-child {
+  justify-content: left;
+}
+
+#header div:last-child {
+  justify-content: right;
 }
 
 @media only screen and (max-width: 768px) {
@@ -347,6 +443,7 @@ main {
 #slider-body {
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 #slider-body span {
@@ -355,6 +452,30 @@ main {
 
 #slider {
   width: 90%;
+}
+
+#time-buttons-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 50%;
+}
+
+#time-buttons-container button {
+  width: 20%;
+  height: 100%;
+}
+
+#time-buttons-container button:first-child {
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+#time-buttons-container button:last-child {
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 @media only screen and (max-width: 768px) {
@@ -367,3 +488,57 @@ main {
   }
 }
 /*========================================================================================================= Slider Panel */
+
+#settings-panel {
+  width: 40vw;
+  height: 50vh;
+  position: absolute;
+  left: 60vw;
+  top: 4vh;
+  border-bottom-left-radius: var(--border-radius);
+  flex-direction: row;
+}
+
+.settings-column {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-column:first-child {
+  width: 35%;
+}
+
+.settings-column:last-child {
+  width: 65%;
+}
+
+.settings-item {
+  display: flex;
+  flex-direction: row;
+  height: 10%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.settings-item:first-child {
+  margin-top: 10px;
+}
+
+.settings-item .button{
+  height: auto;
+  padding: 10px;
+  width: 25%;
+}
+
+.settings-item .button:first-child{
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.settings-item .button:last-child{
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+/*======================================================================================================= Settings Panel */

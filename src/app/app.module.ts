@@ -8,6 +8,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 @NgModule({
   imports:      [ BrowserModule, FormsModule, NgxSliderModule],
   declarations: [ AppComponent ],
-  bootstrap:    [ AppComponent ]
+  bootstrap:    [ AppComponent ],
+  providers:    []
 })
 export class AppModule { }
