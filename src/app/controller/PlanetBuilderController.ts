@@ -10,6 +10,8 @@ const MIN_RADIUS = 50000
 const MAX_RADIUS = 100000
 const MAX_INCLINATION = 30;
 const MAX_AXIS = 30;
+const MIN_ROTATION_PERIOD = 1
+const MAX_ROTATION_PERIOD = 500
 const MIN_ORBITAL_PERIOD = 200
 const MAX_ORBITAL_PERIOD = 1000
 const PLANET_MAPS: string[] = [
@@ -23,7 +25,7 @@ const PLANET_MAPS: string[] = [
     "uranus-map.jpg",
     "neptune-map.jpg",
     "moon-map.jpg"
-]  
+]
 
 export class PlanetBuilderController {
     app: AppComponent;
@@ -43,6 +45,7 @@ export class PlanetBuilderController {
         ceil: 180
     }
     orbitalPeriod: number = 0;
+    rotationPeriod: number = 0;
     clockwise: boolean = false;
 
     constructor(app: AppComponent) {
@@ -59,6 +62,11 @@ export class PlanetBuilderController {
         this.radius = x
     }
 
+    updateRotationPeriod(value: string): void {
+        const x = parseInt(value)
+        this.radius = x
+    }
+
     updateOrbitalPeriod(value: string): void {
         const x = parseInt(value)
         this.orbitalPeriod = x
@@ -70,6 +78,7 @@ export class PlanetBuilderController {
         this.inclination = this.randomInt(0, MAX_INCLINATION)
         this.axis = this.randomInt(0, MAX_AXIS)
         this.orbitalPeriod = this.randomInt(MIN_ORBITAL_PERIOD, MAX_ORBITAL_PERIOD)
+        this.rotationPeriod = this.randomInt(MIN_ROTATION_PERIOD, MAX_ROTATION_PERIOD)
         const r = this.randomInt(0, 1)
         if (r == 0) this.clockwise = true
         else this.clockwise = false
@@ -83,13 +92,14 @@ export class PlanetBuilderController {
         const map = new THREE.TextureLoader().load('./assets/maps/' + PLANET_MAPS[Math.floor(Math.random() * PLANET_MAPS.length)])
         let name = this.name;
         if (this.checkNameAvailability(name)) name = this.name + " 2"
-        this.app.addPlanet(name, this.radius, DETAIL, COLOR, this.distance, this.inclination, this.axis, false, this.orbitalPeriod, this.clockwise, map, 24)
+        this.app.addPlanet(name, this.radius, DETAIL, COLOR, this.distance, this.inclination, this.axis, false, this.orbitalPeriod, this.clockwise, map, this.rotationPeriod)
         this.app.flyToPlanet(this.name)
         this.app.ui.showPlanetbuilder = false;
-        this.distance = 0 
+        this.distance = 0
         this.radius = 0
         this.inclination = 0
         this.axis = 0
+        this.rotationPeriod = 0
         this.orbitalPeriod = 0
         this.clockwise = false
         if (this.name == "New Planet " + this.planetCounter) this.planetCounter += 1;
@@ -98,9 +108,9 @@ export class PlanetBuilderController {
 
     private checkNameAvailability(name: string): boolean {
         for (let i = 0; i < this.app.systems[this.app.currentSystem].planets.length; i++) {
-          let planet = this.app.systems[this.app.currentSystem].planets[i]
+            let planet = this.app.systems[this.app.currentSystem].planets[i]
             if (planet.name == name) {
-              return true
+                return true
             }
         }
         return false;

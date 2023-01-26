@@ -1,544 +1,603 @@
 canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 main {
-  position: absolute;
-  display: flex;
-  top: 0;
-  left: 0;
-  font-family: Arial, Helvetica, sans-serif;
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    font-family: Arial, Helvetica, sans-serif;
 
-  --border-radius: 20px;
-  --ui-base-opacity: 0.95;
-  --bg-color: #272727;
-  --button-bg-color: #191919;
-  --hl-color: #aaffff;
+    --border-radius: 20px;
+    --ui-base-opacity: 0.95;
+    --bg-color: #272727;
+    --button-bg-color: #191919;
+    --hl-color: #aaffff;
 
-  --nav-height: 60vh;
-  --nav-width: 20vw;
+    --nav-height: 60vh;
+    --nav-width: 20vw;
+    --animation-Speed: 0.3s;
+    overflow: none;
 }
 
 #container {
-  position: absolute;
-  display: flex;
-  top: 0;
-  left: 0;
-  opacity: var(--ui-base-opacity);
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    opacity: var(--ui-base-opacity);
+    /* background-color: red;
+    height: calc(100vh - env(safe-area-inset-bottom));
+    width: 100vw; */
 }
 
 .no-selec {
-  user-select: none;
+    user-select: none;
 }
+
 /*============================================================================================================== General */
 
 #contact-container {
-  width: 56vw;
-  height: 72vh;
-  top: 14vh;
-  left: 22vw;
-  justify-content: center;
-  border-radius: var(--border-radius);
+    width: 56vw;
+    height: 72vh;
+    top: 14vh;
+    left: 22vw;
+    justify-content: center;
+    border-radius: var(--border-radius);
 }
 
 @media only screen and (max-width: 768px) {
-  #contact-container {
-    width: 90vw;
-    left: 5vw;
-  }
+    #contact-container {
+        width: 90vw;
+        left: 5vw;
+    }
 }
+
 /*========================================================================================================= Contact Page */
 
 .panel {
-  position: absolute;
-  background-color: var(--bg-color);
-  color: snow;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0px 5px 7px #151515;
+    position: absolute;
+    background-color: var(--bg-color);
+    color: snow;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 5px 7px #151515;
 }
 
 .panel-title {
-  width: 100%;
-  height: 10%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: x-large;
-  border-bottom: 2px solid snow;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: x-large;
+    border-bottom: 2px solid snow;
 }
 
 .panel-body {
-  width: 100%;
-  height: 90%;
-  display: flex;
-  overflow: auto;
+    width: 100%;
+    height: 90%;
+    display: flex;
+    overflow: auto;
 }
 
 .panel-title span {
-  width: 66%;
-  display: flex;
-  justify-content: center;
+    width: 66%;
+    display: flex;
+    justify-content: center;
 }
 
 .panel-title div {
-  width: 17%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 17%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 .panel-title div:hover {
-  font-size: larger;
+    font-size: larger;
 }
+
 /*================================================================================================================ Panel */
 
 #nav-container {
-  width: var(--nav-width);
-  height: var(--nav-height);
-  top: 20vh;
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
-  z-index: 5;
+    width: var(--nav-width);
+    height: var(--nav-height);
+    top: 20vh;
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    z-index: 5;
 }
 
 .nav-list-item {
-  width: calc(20vw - 4px);
-  height: 8%;
-  display: flex;
-  align-items: center;
+    width: calc(20vw - 4px);
+    height: 8%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 .nav-list-item span {
-  margin-left: 1vw;
+    margin-left: 1vw;
 }
 
 .nav-list-item:hover {
-  color: var(--hl-color);
-  border: 2px solid cyan;
-  text-shadow: 1px 1px 1px darkcyan;
-  font-size: large;
+    color: var(--hl-color);
+    border: 2px solid cyan;
+    text-shadow: 1px 1px 1px darkcyan;
+    font-size: large;
 }
 
 .nav-button {
-  display: none;
-  width: 30vw;
-  align-items: center;
-  justify-content: center;
-  height: var(--border-radius);
-  border-top-left-radius: var(--border-radius);
-  border-top-right-radius: var(--border-radius);
-  left: 35vw;
-  font-size: large;
+    display: none;
+    width: 30vw;
+    align-items: center;
+    justify-content: center;
+    height: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    left: 35vw;
+    font-size: large;
 }
 
 #nav-open {
-  top: calc(90vh - var(--border-radius));
+    /* top: calc(100vh - var(--border-radius) - env(safe-area-inser-buttom)); */
+    /* bottom: calc(env(safe-area-inser-buttom) + var(--border-radius)); */
+    /* bottom: env(safe-area-inset-bottom); */
+    position: fixed;
+    bottom: calc(10vh + env(safe-area-inset-bottom));
 }
 
 #nav-close {
-  top: calc(90vh - 60vh - var(--border-radius));
+    /* top: calc(90vh - 60vh - var(--border-radius)); */
+    /* bottom: calc(env(safe-area-inser-buttom) + var(--border-radius) + 60vh); */
+    position: fixed;
+    bottom: calc(70vh + env(safe-area-inset-bottom));
 }
 
 @media only screen and (max-width: 768px) {
-  @keyframes navContainerShow {
-    from {
-      top: 90vh;
+    @keyframes navContainerShow {
+        from {
+            bottom: -60vh;
+        }
+
+        to {
+            bottom: env(safe-area-inset-bottom);
+        }
     }
-    to {
-      top: 30vh;
+
+    @keyframes navCloseShow {
+        from {
+            bottom: calc(10vh + env(safe-area-inset-bottom));
+        }
+
+        to {
+            bottom: calc(70vh + env(safe-area-inset-bottom));
+        }
+
     }
-  }
 
-  @keyframes navCloseShow {
-    from {
-      top: calc(90vh - var(--border-radius));
+    #nav-container {
+        width: 100vw;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: var(--border-radius);
+        position: fixed;
+        bottom: env(safe-area-inset-bottom);
+        top: unset;
+        border-bottom: 10vh solid var(--bg-color);
+        animation: navContainerShow var(--animation-Speed);
+        z-index: 0;
     }
-    to {
-      top: calc(90vh - 60vh - var(--border-radius));
+
+    .nav-list-item {
+        width: calc(100vw - 4px);
+        cursor: pointer;
     }
-  }
 
-  #nav-container { 
-    width: 100vw;
-    border-bottom-right-radius: 0;
-    border-top-left-radius: var(--border-radius);
-    top: 30vh;
-    animation: navContainerShow 0.3s;
-    border-bottom: 100vh solid var(--bg-color)
-  }
+    .nav-button {
+        display: flex;
+    }
 
-  .nav-list-item {
-    width: calc(100vw - 4px);
-  }
-
-  .nav-button {
-    display: flex;
-  }
-
-  #nav-close {
-    animation: navCloseShow 0.3s;
-  }
+    #nav-close {
+        animation: navCloseShow 0.3s;
+    }
 }
+
 /*============================================================================================================ Navigator */
 
 #planetbuilder-container {
-  height: var(--nav-height);
-  width: 40vw;
-  top: calc((100vh - var(--nav-height)) / 2);
-  left: calc(var(--nav-width) - var(--border-radius));
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
-  border-left: var(--border-radius) solid var(--bg-color);
+    height: var(--nav-height);
+    width: 40vw;
+    top: calc((100vh - var(--nav-height)) / 2);
+    left: calc(var(--nav-width) - var(--border-radius));
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    border-left: var(--border-radius) solid var(--bg-color);
 }
 
 #planetbuilder-container .panel-body {
-  width: 100%;
-  flex-wrap: wrap;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .planetbuilder-column {
-  height: 80%;
+    height: 80%;
 }
- 
+
 .planetbuilder-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 12.5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 12.5%;
 }
 
 .planetbuilder-item ngx-slider {
-  width: 90%;
+    width: 90%;
 }
 
 .planetbuilder-item button {
-  height: calc(var(--border-radius)*2);
-  width: 45%;
+    height: calc(var(--border-radius)*2);
+    width: 45%;
 }
 
 .planetbuilder-item button:first-child {
-  border-top-left-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
 }
 
 .planetbuilder-item button:last-child {
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
 }
 
 #planetbuilder-buttons {
-  width: 100%;
-  height: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #planetbuilder-buttons button {
-  height: calc(var(--border-radius)*2);
-  width: 30%;
-  margin-left: 10%;
-  margin-right: 10%;
-  border-radius: var(--border-radius);
+    height: calc(var(--border-radius)*2);
+    width: 30%;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: var(--border-radius);
 }
 
 .planetbuilder-item input {
-  background: #aaa;
-  height: calc(var(--border-radius)*2);
-  border-radius: var(--border-radius);
-  border: none;
-  width: 50%;
+    background: #aaa;
+    height: calc(var(--border-radius)*2);
+    border-radius: var(--border-radius);
+    border: none;
+    width: 50%;
 }
 
 .planetbuilder-item input:hover {
-  background: #ccc;
-}
-/*======================================================================================================= Planet Builder */
-
-#info-container {
-  width: 20vw;
-  height: 60vh;
-  top: 20vh;
-  left: 80vw;
-  border-top-left-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
-}
-
-.info-column {
-  width: 50%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.info-column span {
-  margin-left: 10%;
-  height: 6%;
-  display: flex;
-  align-items: center;
+    background: #ccc;
 }
 
 @media only screen and (max-width: 768px) {
-  #info-container {
-    width: 100vw;
-    left: 0;
-    border-radius: var(--border-radius);
-  }
+    #planetbuilder-container {
+        width: 100vw;
+        left: 0;
+    }
+}
+
+/*======================================================================================================= Planet Builder */
+
+#info-container {
+    width: 20vw;
+    height: 60vh;
+    top: 20vh;
+    left: 80vw;
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+}
+
+.info-column {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.info-column span {
+    margin-left: 10%;
+    height: 6%;
+    display: flex;
+    align-items: center;
+}
+
+@media only screen and (max-width: 768px) {
+    #info-container {
+        width: 100vw;
+        left: 0;
+        border-radius: var(--border-radius);
+    }
 }
 
 /*=========================================================================================================== Info Panel */
 
 #button-container {
-  width: 20vw;
-  height: 18vh;
-  top: 82vh;
-  left: 80vw;
-  border-top-left-radius: var(--border-radius);
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: center;
+    width: 20vw;
+    height: 18vh;
+    position: fixed;
+    bottom: env(safe-area-inset-bottom);
+    left: 80vw;
+    border-top-left-radius: var(--border-radius);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
 }
 
 .button {
-  --button-size: 4.5vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: var(--button-size);
-  height: calc(calc(18vh - 2vw) / 2);
-  background-color: var(--button-bg-color);
-  color: snow;
-  border: none;
-  box-shadow: 0px 5px 7px #151515;
+    --button-size: 4.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--button-size);
+    height: calc(calc(18vh - 2vw) / 2);
+    background-color: var(--button-bg-color);
+    color: snow;
+    border: none;
+    box-shadow: 0px 5px 7px #151515;
+    cursor: pointer;
 }
 
 .button:hover {
-  color: var(--hl-color);
-  border: 2px solid cyan;
-  text-shadow: 1px 1px 2px darkcyan;
+    color: var(--hl-color);
+    border: 2px solid cyan;
+    text-shadow: 1px 1px 2px darkcyan;
 }
 
 .button-active {
-  background-image: linear-gradient(to top, var(--button-bg-color), cyan 0%, var(--button-bg-color) 80%);
-  box-shadow: 0px 5px 7px darkcyan;
+    background-image: linear-gradient(to top, var(--button-bg-color), cyan 0%, var(--button-bg-color) 80%);
+    box-shadow: 0px 5px 7px darkcyan;
 }
 
 #button-container .button:first-child {
-  border-top-left-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
 }
 
 #ui-toggle-button {
-  position: absolute;
-  background-color: var(--bg-color);
-  width: 6vw;
-  height: 4vh;
-  border-radius: 2vh;
-  top: 94vh;
-  left: calc(100vw - 2vh - 6vw);
-  opacity: var(--ui-base-opacity);
-  box-shadow: 0px 5px 7px #151515;
+    position: absolute;
+    background-color: var(--bg-color);
+    width: 6vw;
+    height: 4vh;
+    border-radius: 2vh;
+    top: 94vh;
+    left: calc(100vw - 2vh - 6vw);
+    opacity: var(--ui-base-opacity);
+    box-shadow: 0px 5px 7px #151515;
 }
 
 @media only screen and (max-width: 768px) {
-  #button-container {
-    width: 100vw;
-    left: 0;
-    height: 10vh;
-    border-radius: 0;
-    top: 90vh;
-    border-top-left-radius: var(--border-radius);
-    border-top-right-radius: var(--border-radius);
-  }
+    #button-container {
+        width: 100vw;
+        left: 0;
+        height: 10vh;
+        border-radius: 0;
+        bottom: env(safe-area-inset-bottom);
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+    }
 
-  .button {
-    width: 12%;
-    height: 90%;
-  }
+    .button {
+        width: 12%;
+        height: 90%;
+    }
 
-  #button-container .button:first-child {
-    border-bottom-left-radius: var(--border-radius);
-  }
+    #button-container .button:first-child {
+        border-bottom-left-radius: var(--border-radius);
+    }
 
-  #button-container .button:last-child {
-    border-top-right-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
-  }
+    #button-container .button:last-child {
+        border-top-right-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+    }
 
-  #ui-toggle-button {
-    width: 20vw;
-    left: calc(100vw - 20vw - 2vh);
-  }
+    #ui-toggle-button {
+        width: 20vw;
+        left: calc(100vw - 20vw - 2vh);
+    }
 }
+
 /*========================================================================================================= Button Panel */
 
 #header {
-  /* left: 38vw; */
-  width: 100vw; /* 24vw */
-  height: 4vh;
-  /* border-bottom-left-radius: var(--border-radius);
+    /* left: 38vw; */
+    width: 100vw;
+    /* 24vw */
+    height: 4vh;
+    /* border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius); */
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  z-index: 10;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    z-index: 10;
 }
 
 #header div {
-  width: calc(100vw / 3);
-  display: flex;
-  padding-left: 10px;
-  padding-right: 10px;
-  justify-content: center;
+    width: calc(100vw / 3);
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    justify-content: center;
 }
 
 #header div:first-child {
-  justify-content: left;
+    justify-content: left;
 }
 
 #header div:last-child {
-  justify-content: right;
+    justify-content: right;
 }
 
 @media only screen and (max-width: 768px) {
-  #header {
-    width: 100vw;
-    left: 0;
-  }
+    #header {
+        width: 100vw;
+        left: 0;
+    }
 }
+
 /*=============================================================================================================== Header */
 
 #slider-panel {
-  width: 30vw;
-  height: 13vh;
-  left: 35vw;
-  top: 87vh;
-  border-top-left-radius: var(--border-radius);
-  border-top-right-radius: var(--border-radius);
+    width: 30vw;
+    height: 13vh;
+    left: 35vw;
+    top: 87vh;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
 }
 
 #slider-header {
-  height: 30%;
-  font-size: medium;
-  border: none;
+    height: 30%;
+    font-size: medium;
+    border: none;
 }
 
 #slider-header span {
-  height: 100%;
+    height: 100%;
 }
 
 #slider-header span:first-child {
-  border-top-left-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
 }
 
 #slider-header span:last-child {
-  border-top-right-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
 }
 
 #slider-body {
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 #slider-body span {
-  margin-top: 7px;
+    margin-top: 7px;
 }
 
 #slider {
-  width: 90%;
+    width: 90%;
 }
 
 #time-buttons-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 90%;
-  height: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 50%;
 }
 
 #time-buttons-container button {
-  width: 20%;
-  height: 100%;
+    width: 20%;
+    height: 100%;
 }
 
 #time-buttons-container button:first-child {
-  border-top-left-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
 }
 
 #time-buttons-container button:last-child {
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
 }
 
 @media only screen and (max-width: 768px) {
-  #slider-panel {
-    display: none;
-    /* width: 100vw;
+    #slider-panel {
+        display: none;
+        /* width: 100vw;
     left: 0;
     top: 60vh;
     border-radius: var(--border-radius); */
-  }
+    }
 }
+
 /*========================================================================================================= Slider Panel */
 
 #settings-panel {
-  width: 40vw;
-  height: 50vh;
-  position: absolute;
-  left: 60vw;
-  top: 4vh;
-  border-bottom-left-radius: var(--border-radius);
-  flex-direction: row;
+    width: 40vw;
+    height: 50vh;
+    position: absolute;
+    left: 60vw;
+    top: 4vh;
+    border-bottom-left-radius: var(--border-radius);
+    flex-direction: row;
+    animation: settingsShow var(--animation-Speed);
+}
+
+@keyframes settingsShow {
+    from {
+        top: -50vh;
+    }
+
+    to {
+        top: 4vh;
+    }
 }
 
 .settings-column {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .settings-column:first-child {
-  width: 35%;
+    width: 35%;
 }
 
 .settings-column:last-child {
-  width: 65%;
+    width: 65%;
 }
 
 .settings-item {
-  display: flex;
-  flex-direction: row;
-  height: 10%;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 10%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 .settings-item:first-child {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
-.settings-item .button{
-  height: auto;
-  padding: 10px;
-  width: 25%;
+.settings-item .button {
+    height: auto;
+    padding: 6px;
+    width: 25%;
 }
 
-.settings-item .button:first-child{
-  border-top-left-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
+.settings-item .button:first-child {
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
 }
 
-.settings-item .button:last-child{
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
+.settings-item .button:last-child {
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
 }
+
+@media only screen and (max-width: 768px) {
+    #settings-panel {
+        width: 100vw;
+        left: 0;
+    }
+
+}
+
 /*======================================================================================================= Settings Panel */

@@ -21,6 +21,7 @@ export class NightSkyController {
     ]
     constellations = [];
     n = 1;
+    map: any = new THREE.TextureLoader().load('./assets/maps/star-map.png')
 
     constructor(app: AppComponent) {
         this.app = app;    
@@ -33,15 +34,18 @@ export class NightSkyController {
             const blue = "rgb(180, 180, 255)"
             let colorString = red
             if (s.mag < threshold) colorString = blue
-            const size = (1/s.mag) * 30000000000 // 30B
-            const g = new THREE.SphereGeometry(size, 10, 10);
+            const size = (1/s.mag) * 30000000000  * 5 // 30B
+            // const g = new THREE.SphereGeometry(size, 10, 10);
+            const g = new THREE.BoxGeometry(size, size, size)
             const m = new THREE.MeshBasicMaterial( {
                 color: colorString,
+                map: this.map
             });
             const star = new Star(s.hip, s.x, s.y, s.z, s.mag)
             this.stars.push(star)
             const planet = new THREE.Mesh(g, m);
             planet.position.set(s.x, s.y, s.z)
+            planet.lookAt(0,0,0)
             if (s.mag < threshold) planet.layers.enable(1)
             this.app.scene.add(planet)
         })

@@ -5,18 +5,19 @@
         <!-- Header -->
         <div id="header" class="panel no-selec">
             <div>
-                <span id= "distance-display"> Distance to the sun: {{getDistanceDisplay(unit)}} {{unit}} </span>
+                <span id="distance-display"> Distance to the sun: {{getDistanceDisplay(unit)}} {{unit}} </span>
             </div>
             <div>
-                <span id= "day-display"> Day: {{dayDisplay}} </span>
+                <span id="day-display"> Day: {{dayDisplay}} </span>
             </div>
-            <div>
-                <span id= "distance-display" (click)="ui.toggleSettings()"> Settings </span>
+            <div style="cursor: pointer;">
+                <span id="distance-display" (click)="ui.toggleSettings()"> Settings </span>
             </div>
         </div>
 
         <!-- Navigator -->
-        <div class="nav-button panel no-selec" id="nav-open" (click)="ui.showNav = true; showContactPage = false; showInfoPanel = false;" *ngIf="!ui.showNav">
+        <div class="nav-button panel no-selec" id="nav-open"
+            (click)="ui.showNav = true; showContactPage = false; showInfoPanel = false;" *ngIf="!ui.showNav">
             <div>&#x25B2;</div>
         </div>
         <div class="nav-button panel no-selec" id="nav-close" (click)="ui.showNav = false" *ngIf="ui.showNav">
@@ -28,17 +29,22 @@
                 <div *ngIf="ui.navCurrentPage == 0"> &nbsp; </div>
                 <span *ngIf="ui.navCurrentPage == 0">Systems</span>
                 <span *ngIf="ui.navCurrentPage == 1">Planets</span>
-                <span *ngIf="ui.navCurrentPage == 2 && getPlanet(followPlanetName).moonOf == null" style="font-size: large" (click)="ui.showInfoPanel = true">Moons ({{followPlanetName}})</span>
-                <span *ngIf="ui.navCurrentPage == 2 && getPlanet(followPlanetName).moonOf != null" style="font-size: large">Moons ({{getPlanet(followPlanetName).moonOf.name}})</span>
+                <span *ngIf="ui.navCurrentPage == 2 && getPlanet(followPlanetName).moonOf == null"
+                    style="font-size: large" (click)="ui.showInfoPanel = true">Moons ({{followPlanetName}})</span>
+                <span *ngIf="ui.navCurrentPage == 2 && getPlanet(followPlanetName).moonOf != null"
+                    style="font-size: large">Moons ({{getPlanet(followPlanetName).moonOf.name}})</span>
                 <div *ngIf="ui.navCurrentPage == 0" (click)="addNewSystem()"> + </div>
-                <div *ngIf="ui.navCurrentPage == 1 && !ui.showPlanetbuilder" (click)="ui.showPlanetbuilder = !ui.showPlanetbuilder"> + </div>
-                <div *ngIf="ui.navCurrentPage == 1 && ui.showPlanetbuilder" (click)="ui.showPlanetbuilder = !ui.showPlanetbuilder"> - </div>
+                <div *ngIf="ui.navCurrentPage == 1 && !ui.showPlanetbuilder"
+                    (click)="ui.showPlanetbuilder = !ui.showPlanetbuilder"> + </div>
+                <div *ngIf="ui.navCurrentPage == 1 && ui.showPlanetbuilder"
+                    (click)="ui.showPlanetbuilder = !ui.showPlanetbuilder"> - </div>
                 <div *ngIf="ui.navCurrentPage == 2"> &nbsp; </div>
             </div>
             <div class="panel-body" style="flex-direction: column;">
                 <!-- Systems list -->
                 <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 0">
-                    <div class="nav-list-item" *ngFor="let system of systems" (click)="switchToSystem(getSystemIndex(system.name))">
+                    <div class="nav-list-item" *ngFor="let system of systems"
+                        (click)="switchToSystem(getSystemIndex(system.name))">
                         <span>{{system.name}}</span>
                     </div>
                 </div>
@@ -48,7 +54,8 @@
                     <div class="nav-list-item" (click)="flyToPlanet(sun.name)">
                         <span>{{sun.name}}</span>
                     </div>
-                    <div class="nav-list-item" *ngFor="let planet of systems[currentSystem].planets" (click)="flyToPlanet(planet.name)">
+                    <div class="nav-list-item" *ngFor="let planet of systems[currentSystem].planets"
+                        (click)="flyToPlanet(planet.name)">
                         <span>{{planet.name}}</span>
                     </div>
                 </div>
@@ -56,18 +63,20 @@
                 <!-- Moons list -->
                 <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 2">
                     <div style="width: 100%; height: 100%;" *ngIf="getPlanet(followPlanetName).moonOf == null">
-                        <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moons" (click)="flyToPlanet(moon.name)">
+                        <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moons"
+                            (click)="flyToPlanet(moon.name)">
                             <span>{{moon.name}}</span>
                         </div>
                     </div>
                     <div style="width: 100%; height: 100%;" *ngIf="getPlanet(followPlanetName).moonOf != null">
-                        <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moonOf.moons" (click)="flyToPlanet(moon.name)">
+                        <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moonOf.moons"
+                            (click)="flyToPlanet(moon.name)">
                             <span>{{moon.name}}</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
 
         <!-- Planetbuilder panel -->
         <div id="planetbuilder-container" class="panel no-selec" *ngIf="ui.showPlanetbuilder">
@@ -80,10 +89,10 @@
                         <span> Name </span>
                     </div>
                     <div class="planetbuilder-item">
-                        <span> Distance </span>
+                        <span> Distance (km) </span>
                     </div>
                     <div class="planetbuilder-item">
-                        <span> Radius </span>
+                        <span> Radius (km) </span>
                     </div>
                     <div class="planetbuilder-item">
                         <span> Inclination </span>
@@ -92,10 +101,13 @@
                         <span> Axis </span>
                     </div>
                     <div class="planetbuilder-item">
-                        <span> Orbital period </span>
+                        <span> Rotation period (hours) </span>
                     </div>
                     <div class="planetbuilder-item">
-                        <span> Clockwise </span>
+                        <span> Orbital period (days)</span>
+                    </div>
+                    <div class="planetbuilder-item">
+                        <span> Orbital direction </span>
                     </div>
                 </div>
                 <div class="planetbuilder-column" style="width: 70%;">
@@ -115,11 +127,18 @@
                         <ngx-slider [(value)]="pb.axis" [options]="pb.axisOptions"></ngx-slider>
                     </div>
                     <div class="planetbuilder-item">
-                        <input #pbOrbitalPeriod (keyup)="pb.updateOrbitalPeriod(pbOrbitalPeriod.value)" value="{{pb.orbitalPeriod}}">
+                        <input #pbRotationPeriod (keyup)="pb.updateRotationPeriod(pbRotationPeriod.value)"
+                            value="{{pb.rotationPeriod}}">
+                    </div>
+                    <div class="planetbuilder-item">
+                        <input #pbOrbitalPeriod (keyup)="pb.updateOrbitalPeriod(pbOrbitalPeriod.value)"
+                            value="{{pb.orbitalPeriod}}">
                     </div>
                     <div class="planetbuilder-item"> <!-- Clockwise -->
-                        <button [class.button-active] = "pb.clockwise" class="button" (click)="pb.clockwise = true"> Clockwise </button>
-                        <button [class.button-active] = "!pb.clockwise" class="button" (click)="pb.clockwise = false"> Counter clockwise </button>
+                        <button [class.button-active]="pb.clockwise" class="button" (click)="pb.clockwise = true">
+                            Clockwise </button>
+                        <button [class.button-active]="!pb.clockwise" class="button" (click)="pb.clockwise = false">
+                            Counter clockwise </button>
                     </div>
                 </div>
                 <div id="planetbuilder-buttons">
@@ -157,60 +176,81 @@
                     <span> {{getPlanet(followPlanetName).speed}} days </span>
                     <span *ngIf="getPlanet(followPlanetName).clockwise"> Clockwise </span>
                     <span *ngIf="!getPlanet(followPlanetName).clockwise"> Counter clockwise </span>
-                    <span *ngIf="getPlanet(followPlanetName).moonOf == null"> {{getPlanet(followPlanetName).moons.length}} </span>
-                    <span *ngIf="getPlanet(followPlanetName).moonOf != null"> {{getPlanet(followPlanetName).moonOf.name}} </span>
+                    <span *ngIf="getPlanet(followPlanetName).moonOf == null">
+                        {{getPlanet(followPlanetName).moons.length}} </span>
+                    <span *ngIf="getPlanet(followPlanetName).moonOf != null">
+                        {{getPlanet(followPlanetName).moonOf.name}} </span>
                 </div>
             </div>
         </div>
 
         <!-- Button panel -->
         <div class="panel no-selec" id="button-container">
-            <button class= "button" [class.button-active] = "useGuideLines" (click)="toggleGuideLines()"> Orbit path </button>
-            <button class= "button" [class.button-active] = "ui.showInfoPanel" (click)="ui.showInfo()"> Planet info </button>
-            <button class= "button" [class.button-active] = "lightsOn" (click)="toggleLight()"> Flashlight </button>
-            <button class= "button" [class.button-active] = "ui.showContactPage" (click)="ui.showContact()"> Contact </button>
-            <button class= "button" [class.button-active] = "pov" (click)="togglePOV()"> POV </button>
-            <button class= "button" [class.button-active] = "railedCam" (click)="railedCam = !railedCam"> Cinematic cam </button>
+            <button class="button" [class.button-active]="useGuideLines" (click)="toggleGuideLines()"> Orbit path
+            </button>
+            <button class="button" [class.button-active]="ui.showInfoPanel" (click)="ui.showInfo()"> Planet info
+            </button>
+            <button class="button" [class.button-active]="lightsOn" (click)="toggleLight()"> Flashlight </button>
+            <button class="button" [class.button-active]="ui.showContactPage" (click)="ui.showContact()"> Contact
+            </button>
+            <button class="button" [class.button-active]="pov" (click)="togglePOV()"> POV </button>
+            <button class="button" [class.button-active]="railedCam" (click)="railedCam = !railedCam"> Cinematic cam
+            </button>
             <!-- <button class= "button" [class.button-active] = "flightMode" (click)="flightMode = !flightMode"> Flight mode </button> -->
-            <button class= "button" [class.button-active] = "ui.showConstellations" (click)="ui.toggleConstellations()"> Constellations </button>
-            <button class= "button" (click)="ui.toggleUI()"> Hide UI </button>
+            <button class="button" [class.button-active]="ui.showConstellations" (click)="ui.toggleConstellations()">
+                Constellations </button>
+            <button class="button" (click)="ui.toggleUI()"> Hide UI </button>
         </div>
 
         <!-- Slider panel -->
         <div id="slider-panel" class="panel no-selec">
             <div id="slider-header" class="panel-title">
-                <span class="button" [class.button-active] = "ui.currentSlider == 'Time'" (click)="ui.currentSlider = 'Time'"> Time </span>
-                <span class="button" [class.button-active] = "ui.currentSlider == 'Distance'" (click)="ui.currentSlider = 'Distance'"> Distance </span>
-                <span class="button" [class.button-active] = "ui.currentSlider == 'Zoom'" (click)="ui.currentSlider = 'Zoom'"> Zoom </span>
+                <span class="button" [class.button-active]="ui.currentSlider == 'Time'"
+                    (click)="ui.currentSlider = 'Time'"> Time </span>
+                <span class="button" [class.button-active]="ui.currentSlider == 'Distance'"
+                    (click)="ui.currentSlider = 'Distance'"> Distance </span>
+                <span class="button" [class.button-active]="ui.currentSlider == 'Zoom'"
+                    (click)="ui.currentSlider = 'Zoom'"> Zoom </span>
             </div>
             <div id="slider-body" class="panel-body">
                 <span> {{currentSlider}} </span>
                 <div *ngIf="ui.currentSlider == 'Time'" id="time-buttons-container">
-                    <button class="button" [class.button-active] = "sliderValue == REAL_TIME" (click)="sliderValue = REAL_TIME"> Realtime </button>
-                    <button class="button" [class.button-active] = "sliderValue == 0.167" (click)="sliderValue = 0.167"> 4h/s </button>
-                    <button class="button" [class.button-active] = "sliderValue == 1" (click)="sliderValue = 1"> 1d/s </button>
-                    <button class="button" [class.button-active] = "sliderValue == 7" (click)="sliderValue = 7"> 1w/s </button>
-                    <button class="button" [class.button-active] = "sliderValue == 365" (click)="sliderValue = 365"> 1y/s </button>
+                    <button class="button" [class.button-active]="sliderValue == REAL_TIME"
+                        (click)="sliderValue = REAL_TIME"> Realtime </button>
+                    <button class="button" [class.button-active]="sliderValue == 0.167" (click)="sliderValue = 0.167">
+                        4h/s </button>
+                    <button class="button" [class.button-active]="sliderValue == 1" (click)="sliderValue = 1"> 1d/s
+                    </button>
+                    <button class="button" [class.button-active]="sliderValue == 7" (click)="sliderValue = 7"> 1w/s
+                    </button>
+                    <button class="button" [class.button-active]="sliderValue == 365" (click)="sliderValue = 365"> 1y/s
+                    </button>
                 </div>
                 <div *ngIf="ui.currentSlider == 'Distance'" id="time-buttons-container">
-                    <button class="button" [class.button-active] = "distanceRatio == 0.02" (click)="distanceRatio = 0.02"> 1:50 </button>
-                    <button class="button" [class.button-active] = "distanceRatio == 1" (click)="distanceRatio = 1"> 1:1 </button>
-                    <button class="button" [class.button-active] = "distanceRatio == 2" (click)="distanceRatio = 2"> 2:1 </button>
+                    <button class="button" [class.button-active]="distanceRatio == 0.02" (click)="distanceRatio = 0.02">
+                        1:50 </button>
+                    <button class="button" [class.button-active]="distanceRatio == 1" (click)="distanceRatio = 1"> 1:1
+                    </button>
+                    <button class="button" [class.button-active]="distanceRatio == 2" (click)="distanceRatio = 2"> 2:1
+                    </button>
                 </div>
                 <div id="slider">
                     <!-- <ngx-slider *ngIf="ui.currentSlider == 'Time'" [(value)]="sliderValue" [options]="options"></ngx-slider> -->
                     <!-- <ngx-slider *ngIf="ui.currentSlider == 'Distance'" [(value)]="distanceRatio" [options]="scaleOptions"></ngx-slider> -->
-                    <ngx-slider *ngIf="ui.currentSlider == 'Zoom'" [(value)]="camera.zoom" [options]="zoomOptions"></ngx-slider>
+                    <ngx-slider *ngIf="ui.currentSlider == 'Zoom'" [(value)]="camera.zoom"
+                        [options]="zoomOptions"></ngx-slider>
                 </div>
             </div>
         </div>
 
         <!-- Contact page -->
-        <div id=contact-container class="panel" *ngIf="ui.showContactPage"> 
+        <div id=contact-container class="panel" *ngIf="ui.showContactPage">
             <h1 class="no-selec">Contact me</h1>
             <p><span class="no-selec">Email:</span>&nbsp; jorrit.schepers1@gmail.com</p>
             <a href="https://github.com/JorritSchepers" target="_blank" style="width: 7%">
-                <img class="no-selec" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2048px-Octicons-mark-github.svg.png" style="width: 100%">
+                <img class="no-selec"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2048px-Octicons-mark-github.svg.png"
+                    style="width: 100%">
             </a>
         </div>
 
@@ -225,17 +265,20 @@
             </div>
             <div class="settings-column">
                 <div class="settings-item">
-                    <button class="button" [class.button-active] = "unit == 'km'" (click)="unit = 'km'"> Kilometer </button>     
-                    <button class="button" [class.button-active] = "unit == 'mi'" (click)="unit = 'mi'"> Mile </button>     
-                    <button class="button" [class.button-active] = "unit == 'AU'" (click)="unit = 'AU'"> AU </button>     
+                    <button class="button" [class.button-active]="unit == 'km'" (click)="unit = 'km'"> Kilometer
+                    </button>
+                    <button class="button" [class.button-active]="unit == 'mi'" (click)="unit = 'mi'"> Mile </button>
+                    <button class="button" [class.button-active]="unit == 'AU'" (click)="unit = 'AU'"> AU </button>
                 </div>
                 <div class="settings-item">
-                    <button class="button" [class.button-active] = "showBloom" (click)="showBloom = true"> On </button>     
-                    <button class="button" [class.button-active] = "!showBloom" (click)="showBloom = false"> Off </button>     
+                    <button class="button" [class.button-active]="showBloom" (click)="showBloom = true"> On </button>
+                    <button class="button" [class.button-active]="!showBloom" (click)="showBloom = false"> Off </button>
                 </div>
                 <div class="settings-item">
-                    <button class="button" [class.button-active] = "useGuideLines" (click)="setGuideLines(true)"> On </button>     
-                    <button class="button" [class.button-active] = "!useGuideLines" (click)="setGuideLines(false)"> Off </button>     
+                    <button class="button" [class.button-active]="useGuideLines" (click)="setGuideLines(true)"> On
+                    </button>
+                    <button class="button" [class.button-active]="!useGuideLines" (click)="setGuideLines(false)"> Off
+                    </button>
                 </div>
                 <div class="settings-item"> Work in progress </div>
                 <div class="settings-item"> Work in progress </div>
@@ -243,4 +286,3 @@
         </div>
     </div>
 </main>
-
