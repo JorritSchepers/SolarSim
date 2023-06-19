@@ -293,10 +293,10 @@ main {
 /*======================================================================================================= Planet Builder */
 
 #info-container {
-    width: 20vw;
+    width: 22vw;
     height: 60vh;
     top: 20vh;
-    left: 80vw;
+    left: 78vw;
     border-top-left-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
 }

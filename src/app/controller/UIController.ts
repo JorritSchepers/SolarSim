@@ -24,7 +24,7 @@ export class UIController {
     }
 
     showInfo(): void {
-        this.showInfoPanel = !this.showInfoPanel; 
+        this.showInfoPanel = !this.showInfoPanel;
         this.showSettings = false;
         if (this.mobile) this.showNav = false;
     }
@@ -32,7 +32,7 @@ export class UIController {
     showContact(): void {
         this.showContactPage = !this.showContactPage;
         this.showSettings = false;
-        if (this.mobile) this.showNav = false; 
+        if (this.mobile) this.showNav = false;
     }
 
     toggleSettings() {
@@ -44,5 +44,41 @@ export class UIController {
         this.showConstellations = !this.showConstellations;
         if (this.showConstellations) this.app.nightSky.showConstellations();
         else this.app.nightSky.removeConstellations();
+    }
+
+    transformHoursToTime(hours: number): string {
+        if (hours <= 24) {
+            return hours + " hours";
+        }
+
+        let time: string = "";
+        let days = Math.floor(hours / 24);
+        let hoursLeft = Math.round(hours % 24);
+
+        if (hoursLeft == 0) {
+
+            return days + " days";
+        }
+
+        time = days + " days " + hoursLeft + " hours";
+        return time;
+    }
+
+    transformDaysToTime(days: number): string {
+        if (days <= 365) {
+            return days + " days";
+        }
+
+        let time: string = "";
+        let years = Math.floor(days / 365);
+        let daysLeft = Math.round(days % 365);
+
+        if (daysLeft == 0) {
+
+            return days + " days";
+        }
+
+        time = years + " years " + daysLeft + " days";
+        return time;
     }
 }

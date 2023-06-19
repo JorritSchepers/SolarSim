@@ -28,6 +28,9 @@ export class Planet {
     rotationSpeed: number;
 
     constructor(app: AppComponent, name: string, radius: number, detail: number, color: number, distance: number, inclination: number, axis: number, isStar: boolean, speed: number, clockwise: boolean, textureMap: any, moonOf: Planet, rotationSpeed: number) {
+
+        detail = 100;
+
         this.app = app
         this.name = name;
         this.radius = radius;
@@ -35,7 +38,9 @@ export class Planet {
         this.color = "#" + color.toString(16);
         this.distance = distance;
         this.inclination = inclination;
-        if (moonOf != null) this.inclination += moonOf.inclination
+        if (moonOf != null) {
+            this.inclination += moonOf.axis
+        }
         if (!clockwise) this.inclination += 180
         this.axis = axis;
         this.ORIGINAL_DISTANCE = distance;
@@ -90,10 +95,11 @@ export class Planet {
         return this.inclination
     }
 
-    addRing(maxWidth, width, map) {
+    addRing(maxWidth, width, map, color?) {
         const g = new THREE.TorusGeometry(maxWidth, width, 2, 400);
         const m = new THREE.MeshBasicMaterial({
-            map: map
+            map: map,
+            color: color
         });
         this.ring = new THREE.Mesh(g, m);
         this.ring.position.set(this.model.position.x, this.model.position.y, this.model.position.z)
