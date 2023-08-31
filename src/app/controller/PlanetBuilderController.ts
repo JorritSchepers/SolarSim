@@ -47,6 +47,7 @@ export class PlanetBuilderController {
     orbitalPeriod: number = 0;
     rotationPeriod: number = 0;
     clockwise: boolean = false;
+    color = "#dddddd";
 
     constructor(app: AppComponent) {
         this.app = app;
@@ -88,22 +89,35 @@ export class PlanetBuilderController {
         return Math.round(min + (Math.random() * max))
     }
 
-    createPlanet() {
-        const map = new THREE.TextureLoader().load('./assets/maps/' + PLANET_MAPS[Math.floor(Math.random() * PLANET_MAPS.length)])
-        let name = this.name;
-        if (this.checkNameAvailability(name)) name = this.name + " 2"
-        this.app.addPlanet(name, this.radius, DETAIL, COLOR, this.distance, this.inclination, this.axis, false, this.orbitalPeriod, this.clockwise, map, this.rotationPeriod)
-        this.app.flyToPlanet(this.name)
-        this.app.ui.showPlanetbuilder = false;
-        this.distance = 0
-        this.radius = 0
-        this.inclination = 0
-        this.axis = 0
-        this.rotationPeriod = 0
-        this.orbitalPeriod = 0
-        this.clockwise = false
-        if (this.name == "New Planet " + this.planetCounter) this.planetCounter += 1;
-        this.name = "New Planet " + this.planetCounter
+    createPlanet(event) {
+        if (this.distance == 0) return;
+
+        let n = 1;
+
+        if (event.shiftKey) {
+            n = this.randomInt(3, 8);
+        } else if (event.altKey) {
+            n = 30;
+        }
+
+        for (let i = 0; i < n; i++) {
+            if (i > 0) this.generateRandomValues()
+            const map = new THREE.TextureLoader().load('./assets/maps/' + PLANET_MAPS[Math.floor(Math.random() * PLANET_MAPS.length)])
+            let name = this.name;
+            if (this.checkNameAvailability(name)) name = this.name + " 2"
+            this.app.addPlanet(name, this.radius, DETAIL, COLOR, this.distance, this.inclination, this.axis, false, this.orbitalPeriod, this.clockwise, map, this.rotationPeriod)
+            this.app.flyToPlanet(this.name)
+            this.app.ui.showPlanetbuilder = false;
+            this.distance = 0
+            this.radius = 0
+            this.inclination = 0
+            this.axis = 0
+            this.rotationPeriod = 0
+            this.orbitalPeriod = 0
+            this.clockwise = false
+            if (this.name == "New Planet " + this.planetCounter) this.planetCounter += 1;
+            this.name = "New Planet " + this.planetCounter
+        }
     }
 
     private checkNameAvailability(name: string): boolean {

@@ -1,325 +1,349 @@
 <canvas id="bg"></canvas>
 <main>
-    <div *ngIf="viewer == 'default'">
-        <button id="ui-toggle-button" class="button no-selec" *ngIf="!ui.showUI" (click)="ui.toggleUI()"> Show UI
-        </button>
-        <div id="container" *ngIf="ui.showUI">
-            <!-- Header -->
-            <div id="header" class="panel no-selec">
-                <div>
-                    <span id="distance-display"> Distance to the sun: {{getDistanceDisplay(unit)}} {{unit}} </span>
+    <!-- <div *ngIf="viewer == 'default'"> -->
+    <button id="ui-toggle-button" class="button no-selec" *ngIf="!ui.showUI && viewer != 'constellations'"
+        (click)="ui.toggleUI()"> Show UI
+    </button>
+    <!-- <div id="container" *ngIf="ui.showUI"> -->
+    <!-- Header -->
+    <div id="header" class="panel no-selec" *ngIf="ui.showUI">
+        <div>
+            <span id="distance-display"> Distance to the sun: {{getDistanceDisplay(unit)}} {{unit}} </span>
+        </div>
+        <div>
+            <span id="day-display"> Day: {{dayDisplay}} </span>
+        </div>
+        <div style="cursor: pointer;">
+            <span id="distance-display" (click)="ui.toggleSettings()"> Settings </span>
+        </div>
+    </div>
+
+    <!-- Navigator -->
+    <div class="nav-button panel no-selec" id="nav-open"
+        (click)="ui.showNav = true; showContactPage = false; showInfoPanel = false;" *ngIf="!ui.showNav">
+        <div>&#x25B2;</div>
+    </div>
+    <div class="nav-button panel no-selec" id="nav-close" (click)="ui.showNav = false" *ngIf="ui.showNav">
+        <div>&#x25BC;</div>
+    </div>
+    <div id="nav-container" class="panel no-selec" *ngIf="ui.showNav && ui.showUI">
+        <div class="panel-title">
+            <div *ngIf="ui.navCurrentPage != 0" (click)="ui.navCurrentPage = ui.navCurrentPage - 1"> &lt; </div>
+            <div *ngIf="ui.navCurrentPage == 0"> &nbsp; </div>
+            <span *ngIf="ui.navCurrentPage == 0">Systems</span>
+            <span *ngIf="ui.navCurrentPage == 1" style="font-size: large;">{{systems[currentSystem].name}}</span>
+            <span *ngIf="ui.navCurrentPage == 2 && getPlanet(followPlanetName).moonOf == null" style="font-size: large"
+                (click)="ui.showInfoPanel = true">Moons ({{followPlanetName}})</span>
+            <span *ngIf="ui.navCurrentPage == 2 && getPlanet(followPlanetName).moonOf != null"
+                style="font-size: large">Moons ({{getPlanet(followPlanetName).moonOf.name}})</span>
+            <div style="cursor: default;"> &nbsp; </div>
+        </div>
+        <div class="panel-body" style="flex-direction: column;">
+            <!-- Systems list -->
+            <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 0">
+                <div class="nav-list-item" *ngFor="let system of systems"
+                    (click)="switchToSystem(getSystemIndex(system.name))">
+                    <span>{{system.name}} ({{system.planets.length}})</span>
                 </div>
-                <div>
-                    <span id="day-display"> Day: {{dayDisplay}} </span>
-                </div>
-                <div style="cursor: pointer;">
-                    <span id="distance-display" (click)="ui.toggleSettings()"> Settings </span>
+                <div class="nav-list-item" (click)="ui.showSystemNameInput = true"
+                    style="justify-content: center; font-size: 200%">
+                    <span *ngIf="!ui.showSystemNameInput">+</span>
+                    <span *ngIf="ui.showSystemNameInput" style="font-size: large;"> &gt; </span>
+                    <input id="system-name-input" autofocus *ngIf="ui.showSystemNameInput" #newSystemName
+                        (keyup.enter)="addSystem(newSystemName.value)">
                 </div>
             </div>
 
-            <!-- Navigator -->
-            <div class="nav-button panel no-selec" id="nav-open"
-                (click)="ui.showNav = true; showContactPage = false; showInfoPanel = false;" *ngIf="!ui.showNav">
-                <div>&#x25B2;</div>
-            </div>
-            <div class="nav-button panel no-selec" id="nav-close" (click)="ui.showNav = false" *ngIf="ui.showNav">
-                <div>&#x25BC;</div>
-            </div>
-            <div id="nav-container" class="panel no-selec" *ngIf="ui.showNav">
-                <div class="panel-title">
-                    <div *ngIf="ui.navCurrentPage != 0" (click)="ui.navCurrentPage = ui.navCurrentPage - 1"> &lt; </div>
-                    <div *ngIf="ui.navCurrentPage == 0"> &nbsp; </div>
-                    <span *ngIf="ui.navCurrentPage == 0">Systems</span>
-                    <span *ngIf="ui.navCurrentPage == 1">Planets</span>
-                    <span *ngIf="ui.navCurrentPage == 2 && getPlanet(followPlanetName).moonOf == null"
-                        style="font-size: large" (click)="ui.showInfoPanel = true">Moons ({{followPlanetName}})</span>
-                    <span *ngIf="ui.navCurrentPage == 2 && getPlanet(followPlanetName).moonOf != null"
-                        style="font-size: large">Moons ({{getPlanet(followPlanetName).moonOf.name}})</span>
-                    <div *ngIf="ui.navCurrentPage == 0" (click)="addNewSystem()"> + </div>
-                    <div *ngIf="ui.navCurrentPage == 1 && !ui.showPlanetbuilder"
-                        (click)="ui.showPlanetbuilder = !ui.showPlanetbuilder"> + </div>
-                    <div *ngIf="ui.navCurrentPage == 1 && ui.showPlanetbuilder"
-                        (click)="ui.showPlanetbuilder = !ui.showPlanetbuilder"> - </div>
-                    <div *ngIf="ui.navCurrentPage == 2"> &nbsp; </div>
+            <!-- Planets list -->
+            <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 1">
+                <div class="nav-list-item" (click)="flyToPlanet(sun.name)">
+                    <span>{{sun.name}}</span>
                 </div>
-                <div class="panel-body" style="flex-direction: column;">
-                    <!-- Systems list -->
-                    <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 0">
-                        <div class="nav-list-item" *ngFor="let system of systems"
-                            (click)="switchToSystem(getSystemIndex(system.name))">
-                            <span>{{system.name}}</span>
-                        </div>
-                    </div>
-
-                    <!-- Planets list -->
-                    <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 1">
-                        <div class="nav-list-item" (click)="flyToPlanet(sun.name)">
-                            <span>{{sun.name}}</span>
-                        </div>
-                        <div class="nav-list-item" *ngFor="let planet of systems[currentSystem].planets"
-                            (click)="flyToPlanet(planet.name)">
-                            <span>{{planet.name}}</span>
-                        </div>
-                    </div>
-
-                    <!-- Moons list -->
-                    <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 2">
-                        <div style="width: 100%; height: 100%; overflow-x: hidden;"
-                            *ngIf="getPlanet(followPlanetName).moonOf == null">
-                            <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moons"
-                                (click)="flyToPlanet(moon.name)">
-                                <span>{{moon.name}}</span>
-                            </div>
-                        </div>
-                        <div style="width: 100%; height: 100%;" *ngIf="getPlanet(followPlanetName).moonOf != null">
-                            <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moonOf.moons"
-                                (click)="flyToPlanet(moon.name)">
-                                <span>{{moon.name}}</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="nav-list-item" *ngFor="let planet of systems[currentSystem].planets"
+                    (click)="flyToPlanet(planet.name)">
+                    <span>{{planet.name}}</span>
+                </div>
+                <div class="nav-list-item" (click)="openPlanetBuilder()"
+                    style="justify-content: center; font-size: 200%;">
+                    <span>+</span>
                 </div>
             </div>
 
-            <!-- Planetbuilder panel -->
-            <div id="planetbuilder-container" class="panel no-selec" *ngIf="ui.showPlanetbuilder">
-                <div class="panel-title">
-                    <span> Planetbuilder </span>
-                </div>
-                <div class="panel-body">
-                    <div class="planetbuilder-column" style="width: 30%;">
-                        <div class="planetbuilder-item">
-                            <span> Name </span>
-                        </div>
-                        <div class="planetbuilder-item">
-                            <span> Distance (km) </span>
-                        </div>
-                        <div class="planetbuilder-item">
-                            <span> Radius (km) </span>
-                        </div>
-                        <div class="planetbuilder-item">
-                            <span> Inclination </span>
-                        </div>
-                        <div class="planetbuilder-item">
-                            <span> Axis </span>
-                        </div>
-                        <div class="planetbuilder-item">
-                            <span> Rotation period (hours) </span>
-                        </div>
-                        <div class="planetbuilder-item">
-                            <span> Orbital period (days)</span>
-                        </div>
-                        <div class="planetbuilder-item">
-                            <span> Orbital direction </span>
-                        </div>
-                    </div>
-                    <div class="planetbuilder-column" style="width: 70%;">
-                        <div class="planetbuilder-item"> <!-- Name -->
-                            <input #pbName (keyup)="pb.name = pbName.value" value="{{pb.name}}">
-                        </div>
-                        <div class="planetbuilder-item"> <!-- Distance -->
-                            <input #pbDistance (keyup)="pb.updateDistance(pbDistance.value)" value="{{pb.distance}}">
-                        </div>
-                        <div class="planetbuilder-item">
-                            <input #pbRadius (keyup)="pb.updateRadius(pbRadius.value)" value="{{pb.radius}}">
-                        </div>
-                        <div class="planetbuilder-item">
-                            <ngx-slider [(value)]="pb.inclination" [options]="pb.inclinationOptions"></ngx-slider>
-                        </div>
-                        <div class="planetbuilder-item">
-                            <ngx-slider [(value)]="pb.axis" [options]="pb.axisOptions"></ngx-slider>
-                        </div>
-                        <div class="planetbuilder-item">
-                            <input #pbRotationPeriod (keyup)="pb.updateRotationPeriod(pbRotationPeriod.value)"
-                                value="{{pb.rotationPeriod}}">
-                        </div>
-                        <div class="planetbuilder-item">
-                            <input #pbOrbitalPeriod (keyup)="pb.updateOrbitalPeriod(pbOrbitalPeriod.value)"
-                                value="{{pb.orbitalPeriod}}">
-                        </div>
-                        <div class="planetbuilder-item"> <!-- Clockwise -->
-                            <button [class.button-active]="pb.clockwise" class="button" (click)="pb.clockwise = true">
-                                Clockwise </button>
-                            <button [class.button-active]="!pb.clockwise" class="button" (click)="pb.clockwise = false">
-                                Counter clockwise </button>
-                        </div>
-                    </div>
-                    <div id="planetbuilder-buttons">
-                        <button class="button" (click)="pb.generateRandomValues()"> Random </button>
-                        <button class="button" (click)="pb.createPlanet()"> Create </button>
+            <!-- Moons list -->
+            <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 2">
+                <div style="width: 100%; height: 100%; overflow-x: hidden;"
+                    *ngIf="getPlanet(followPlanetName).moonOf == null">
+                    <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moons"
+                        (click)="flyToPlanet(moon.name)">
+                        <span>{{moon.name}}</span>
                     </div>
                 </div>
-            </div>
-
-            <!-- Info panel -->
-            <div id="info-container" class="panel no-selec" *ngIf="followPlanetName != null && ui.showInfoPanel">
-                <div class="panel-title">
-                    <div> &nbsp; </div>
-                    <span> {{followPlanetName}} </span>
-                    <div (click)="ui.showInfoPanel = false"> x </div>
-                </div>
-                <div class="panel-body">
-                    <div class="info-column" style="width: 50%;">
-                        <span> Diameter: </span>
-                        <span> Distance: </span>
-                        <span> Inclination: </span>
-                        <span> Axis: </span>
-                        <span> Rotation period: </span>
-                        <span> Orbital period: </span>
-                        <span> Direction: </span>
-                        <span *ngIf="getPlanet(followPlanetName).moonOf == null"> Moons: </span>
-                        <span *ngIf="getPlanet(followPlanetName).moonOf != null"> Is a moon of: </span>
-                    </div>
-                    <div class="info-column" style="width: 50%;">
-                        <span> {{getPlanet(followPlanetName).radius*2}}km </span>
-                        <span> {{getPlanet(followPlanetName).distance}}km </span>
-                        <span> {{getPlanet(followPlanetName).getInclination()}}&deg; </span>
-                        <span> {{getPlanet(followPlanetName).axis}}&deg; </span>
-                        <!-- <span> {{getPlanet(followPlanetName).rotationSpeed}} hours </span> -->
-                        <span> {{ui.transformHoursToTime(getPlanet(followPlanetName).rotationSpeed)}} </span>
-                        <!-- <span> {{getPlanet(followPlanetName).speed}} days </span> -->
-                        <span> {{ui.transformDaysToTime(getPlanet(followPlanetName).speed)}} </span>
-                        <span *ngIf="getPlanet(followPlanetName).clockwise"> Clockwise </span>
-                        <span *ngIf="!getPlanet(followPlanetName).clockwise"> Counter clockwise </span>
-                        <span *ngIf="getPlanet(followPlanetName).moonOf == null">
-                            {{getPlanet(followPlanetName).moons.length}} </span>
-                        <span *ngIf="getPlanet(followPlanetName).moonOf != null">
-                            {{getPlanet(followPlanetName).moonOf.name}} </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Button panel -->
-            <div class="panel no-selec" id="button-container">
-                <button class="button" [class.button-active]="useGuideLines" (click)="toggleGuideLines()"> Orbit path
-                </button>
-                <button class="button" [class.button-active]="ui.showInfoPanel" (click)="ui.showInfo()"> Planet info
-                </button>
-                <button class="button" [class.button-active]="lightsOn" (click)="toggleLight()"> Flashlight </button>
-                <button class="button" [class.button-active]="ui.showContactPage" (click)="ui.showContact()"> Contact
-                </button>
-                <button class="button" [class.button-active]="pov" (click)="togglePOV()"> POV </button>
-                <button class="button" [class.button-active]="railedCam" (click)="railedCam = !railedCam"> Cinematic cam
-                </button>
-                <!-- <button class= "button" [class.button-active] = "flightMode" (click)="flightMode = !flightMode"> Flight mode </button> -->
-                <button class="button" [class.button-active]="ui.showConstellations"
-                    (click)="ui.toggleConstellations()">
-                    Constellations </button>
-                <button class="button" (click)="ui.toggleUI()"> Hide UI </button>
-            </div>
-
-            <!-- Slider panel -->
-            <div id="slider-panel" class="panel no-selec">
-                <div id="slider-header" class="panel-title">
-                    <span class="button" [class.button-active]="ui.currentSlider == 'Time'"
-                        (click)="ui.currentSlider = 'Time'"> Time </span>
-                    <span class="button" [class.button-active]="ui.currentSlider == 'Distance'"
-                        (click)="ui.currentSlider = 'Distance'"> Distance </span>
-                    <span class="button" [class.button-active]="ui.currentSlider == 'Zoom'"
-                        (click)="ui.currentSlider = 'Zoom'"> Zoom </span>
-                </div>
-                <div id="slider-body" class="panel-body">
-                    <span> {{currentSlider}} </span>
-                    <div *ngIf="ui.currentSlider == 'Time'" id="time-buttons-container">
-                        <button class="button" [class.button-active]="sliderValue == REAL_TIME"
-                            (click)="sliderValue = REAL_TIME"> Realtime </button>
-                        <button class="button" [class.button-active]="sliderValue == 0.167"
-                            (click)="sliderValue = 0.167">
-                            4h/s </button>
-                        <button class="button" [class.button-active]="sliderValue == 1" (click)="sliderValue = 1"> 1d/s
-                        </button>
-                        <button class="button" [class.button-active]="sliderValue == 7" (click)="sliderValue = 7"> 1w/s
-                        </button>
-                        <button class="button" [class.button-active]="sliderValue == 365" (click)="sliderValue = 365">
-                            1y/s
-                        </button>
-                    </div>
-                    <div *ngIf="ui.currentSlider == 'Distance'" id="time-buttons-container">
-                        <button class="button" [class.button-active]="distanceRatio == 0.02"
-                            (click)="distanceRatio = 0.02">
-                            1:50 </button>
-                        <button class="button" [class.button-active]="distanceRatio == 1" (click)="distanceRatio = 1">
-                            1:1
-                        </button>
-                        <button class="button" [class.button-active]="distanceRatio == 2" (click)="distanceRatio = 2">
-                            2:1
-                        </button>
-                    </div>
-                    <div id="slider">
-                        <!-- <ngx-slider *ngIf="ui.currentSlider == 'Time'" [(value)]="sliderValue" [options]="options"></ngx-slider> -->
-                        <!-- <ngx-slider *ngIf="ui.currentSlider == 'Distance'" [(value)]="distanceRatio" [options]="scaleOptions"></ngx-slider> -->
-                        <ngx-slider *ngIf="ui.currentSlider == 'Zoom'" [(value)]="camera.zoom"
-                            [options]="zoomOptions"></ngx-slider>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contact page -->
-            <div id=contact-container class="panel" *ngIf="ui.showContactPage">
-                <h1 class="no-selec">Contact me</h1>
-                <p><span class="no-selec">Email:</span>&nbsp; jorrit.schepers1@gmail.com</p>
-                <a href="https://github.com/JorritSchepers" target="_blank" style="width: 7%">
-                    <img class="no-selec"
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2048px-Octicons-mark-github.svg.png"
-                        style="width: 100%">
-                </a>
-            </div>
-
-            <!-- Settings panel -->
-            <div id="settings-panel" class="panel no-selec" *ngIf="ui.showSettings">
-                <div class="settings-column">
-                    <div class="settings-item"> Distance unit </div>
-                    <div class="settings-item"> Bloom </div>
-                    <div class="settings-item"> Draw orbits </div>
-                    <div class="settings-item"> Draw flight path </div>
-                    <div class="settings-item"> Compass </div>
-                    <div class="settings-item"> Constellations viewer </div>
-                </div>
-                <div class="settings-column">
-                    <div class="settings-item">
-                        <button class="button" [class.button-active]="unit == 'km'" (click)="unit = 'km'"> Kilometer
-                        </button>
-                        <button class="button" [class.button-active]="unit == 'mi'" (click)="unit = 'mi'"> Mile
-                        </button>
-                        <button class="button" [class.button-active]="unit == 'AU'" (click)="unit = 'AU'"> AU </button>
-                    </div>
-                    <div class="settings-item">
-                        <button class="button" [class.button-active]="showBloom" (click)="showBloom = true"> On
-                        </button>
-                        <button class="button" [class.button-active]="!showBloom" (click)="showBloom = false"> Off
-                        </button>
-                    </div>
-                    <div class="settings-item">
-                        <button class="button" [class.button-active]="useGuideLines" (click)="setGuideLines(true)"> On
-                        </button>
-                        <button class="button" [class.button-active]="!useGuideLines" (click)="setGuideLines(false)">
-                            Off
-                        </button>
-                    </div>
-                    <div class="settings-item"> Work in progress </div>
-                    <div class="settings-item"> Work in progress </div>
-                    <div class="settings-item">
-                        <button class="button" (click)="EnterConstellationsViewer()"> View </button>
+                <div style="width: 100%; height: 100%;" *ngIf="getPlanet(followPlanetName).moonOf != null">
+                    <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moonOf.moons"
+                        (click)="flyToPlanet(moon.name)">
+                        <span>{{moon.name}}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Constellations Viewer -->
-    <div *ngIf="viewer == 'constellations'">
-        <button class="button" (click)="ExitConstellationsViewer()"> Exit </button>
-        <!-- <button class="button" (click)="targetConst = 'Orion'"> Orion </button>
-        <button class="button" (click)="targetConst = 'Scorpius'"> Scorpius </button>
-        <button class="button" (click)="targetConst = 'Cassiopeia'"> Cassiopeia </button>
-        <button class="button" (click)="targetConst = 'Ursa Major'"> Ursa Major </button>
-        <button class="button" (click)="targetConst = 'Ursa Minor'"> Ursa Minor </button>
-        <button class="button" (click)="targetConst = 'Cygnus'"> Cygnus </button>
-        <button class="button" (click)="targetConst = 'Leo'"> Leo </button>
-        <button class="button" (click)="targetConst = 'Draco'"> Draco </button>
-        <button class="button" (click)="targetConst = 'Canis Major'"> Canis Major </button> -->
-        <button *ngFor="let name of nightSky.constNamesStars" class="button" (click)="targetConst = name[0]">
-            {{name[0]}}
+    <!-- Planetbuilder panel -->
+    <div id="planetbuilder-container" class="panel no-selec" *ngIf="ui.showPlanetbuilder && ui.showUI">
+        <div class="panel-title">
+            <div style="cursor: default;">&nbsp;</div>
+            <span> Planetbuilder </span>
+            <div (click)="ui.showPlanetbuilder = !ui.showPlanetbuilder"> x </div>
+        </div>
+        <div class="panel-body">
+            <div class="planetbuilder-column" style="width: 40%;">
+                <div class="planetbuilder-item">
+                    <span> Name </span>
+                </div>
+                <div class="planetbuilder-item">
+                    <span> Distance (km) </span>
+                </div>
+                <div class="planetbuilder-item">
+                    <span> Radius (km) </span>
+                </div>
+                <div class="planetbuilder-item">
+                    <span> Inclination </span>
+                </div>
+                <div class="planetbuilder-item">
+                    <span> Axis </span>
+                </div>
+                <div class="planetbuilder-item">
+                    <span> Rotation period (hours) </span>
+                </div>
+                <div class="planetbuilder-item">
+                    <span> Orbital period (days)</span>
+                </div>
+                <div class="planetbuilder-item">
+                    <span> Orbital direction </span>
+                </div>
+                <!-- <div class="planetbuilder-item">
+                            <span> Color </span>
+                        </div> -->
+
+            </div>
+            <div class="planetbuilder-column" style="width: 60%;">
+                <div class="planetbuilder-item"> <!-- Name -->
+                    <input #pbName (keyup)="pb.name = pbName.value" value="{{pb.name}}">
+                </div>
+                <div class="planetbuilder-item"> <!-- Distance -->
+                    <input #pbDistance (keyup)="pb.updateDistance(pbDistance.value)" value="{{pb.distance}}">
+                </div>
+                <div class="planetbuilder-item">
+                    <input #pbRadius (keyup)="pb.updateRadius(pbRadius.value)" value="{{pb.radius}}">
+                </div>
+                <div class="planetbuilder-item">
+                    <ngx-slider [(value)]="pb.inclination" [options]="pb.inclinationOptions"></ngx-slider>
+                </div>
+                <div class="planetbuilder-item">
+                    <ngx-slider [(value)]="pb.axis" [options]="pb.axisOptions"></ngx-slider>
+                </div>
+                <div class="planetbuilder-item">
+                    <input #pbRotationPeriod (keyup)="pb.updateRotationPeriod(pbRotationPeriod.value)"
+                        value="{{pb.rotationPeriod}}">
+                </div>
+                <div class="planetbuilder-item">
+                    <input #pbOrbitalPeriod (keyup)="pb.updateOrbitalPeriod(pbOrbitalPeriod.value)"
+                        value="{{pb.orbitalPeriod}}">
+                </div>
+                <div class="planetbuilder-item"> <!-- Clockwise -->
+                    <button [class.button-active]="pb.clockwise" class="button" (click)="pb.clockwise = true">
+                        Clockwise </button>
+                    <button [class.button-active]="!pb.clockwise" class="button" (click)="pb.clockwise = false">
+                        Counter clockwise </button>
+                </div>
+                <!-- <div class="planetbuilder-item">
+                            <input type="color" #pbColor value="{{pb.color}}" (click)="pb.color = pbColor.value"
+                                style="background-color: rgba(0, 0, 0, 0); cursor: pointer;">
+                        </div> -->
+            </div>
+            <div id="planetbuilder-buttons">
+                <button class="button" (click)="pb.generateRandomValues()"> Random </button>
+                <button class="button" (click)="pb.createPlanet($event)"> Create </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info panel -->
+    <div id="info-container" class="panel no-selec" *ngIf="followPlanetName != null && ui.showInfoPanel && ui.showUI">
+        <div class="panel-title">
+            <div> &nbsp; </div>
+            <span> {{followPlanetName}} </span>
+            <div (click)="ui.showInfoPanel = false"> x </div>
+        </div>
+        <div class="panel-body">
+            <div class="info-column" style="width: 50%;">
+                <span> Diameter: </span>
+                <span> Distance: </span>
+                <span> Inclination: </span>
+                <span> Axis: </span>
+                <span> Rotation period: </span>
+                <span> Orbital period: </span>
+                <span> Direction: </span>
+                <span *ngIf="getPlanet(followPlanetName).moonOf == null"> Moons: </span>
+                <span *ngIf="getPlanet(followPlanetName).moonOf != null"> Is a moon of: </span>
+                <span *ngIf="getPlanet(followPlanetName).discoveredBy != null"> Discoverd By: </span>
+                <span *ngIf="getPlanet(followPlanetName).discoveryYear != null"> Discovery Year: </span>
+                <span *ngIf="getPlanet(followPlanetName).yearAnnounced != null"> Year Announced: </span>
+            </div>
+            <div class="info-column" style="width: 50%;">
+                <span> {{getPlanet(followPlanetName).radius*2}}km </span>
+                <span> {{getPlanet(followPlanetName).distance}}km </span>
+                <span> {{getPlanet(followPlanetName).getInclination()}}&deg; </span>
+                <span> {{getPlanet(followPlanetName).axis}}&deg; </span>
+                <!-- <span> {{getPlanet(followPlanetName).rotationSpeed}} hours </span> -->
+                <span> {{ui.transformHoursToTime(getPlanet(followPlanetName).rotationSpeed)}} </span>
+                <!-- <span> {{getPlanet(followPlanetName).speed}} days </span> -->
+                <span> {{ui.transformDaysToTime(getPlanet(followPlanetName).speed)}} </span>
+                <span *ngIf="getPlanet(followPlanetName).clockwise"> Clockwise </span>
+                <span *ngIf="!getPlanet(followPlanetName).clockwise"> Counter clockwise </span>
+                <span *ngIf="getPlanet(followPlanetName).moonOf == null">
+                    {{getPlanet(followPlanetName).moons.length}} </span>
+                <span *ngIf="getPlanet(followPlanetName).moonOf != null">
+                    {{getPlanet(followPlanetName).moonOf.name}} </span>
+                <span
+                    *ngIf="getPlanet(followPlanetName).discoveredBy != null">{{getPlanet(followPlanetName).discoveredBy}}
+                </span>
+                <span *ngIf="getPlanet(followPlanetName).discoveryYear != null">
+                    {{getPlanet(followPlanetName).discoveryYear}} </span>
+                <span *ngIf="getPlanet(followPlanetName).yearAnnounced != null">
+                    {{getPlanet(followPlanetName).yearAnnounced}} </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button panel -->
+    <div class="panel no-selec" id="button-container" *ngIf="ui.showUI">
+        <button class="button" [class.button-active]="useGuideLines" (click)="toggleGuideLines()"> Orbit path
         </button>
+        <button class="button" [class.button-active]="ui.showInfoPanel" (click)="ui.showInfo()"> Planet info
+        </button>
+        <button class="button" [class.button-active]="lightsOn" (click)="toggleLight()"> Flashlight </button>
+        <button class="button" [class.button-active]="ui.showContactPage" (click)="ui.showContact()"> Contact
+        </button>
+        <button class="button" [class.button-active]="pov" (click)="togglePOV()"> POV </button>
+        <button class="button" [class.button-active]="railedCam" (click)="railedCam = !railedCam"> Cinematic cam
+        </button>
+        <button class="button" [class.button-active]="ui.showConstellations" (click)="ui.toggleConstellations()">
+            Constellations </button>
+        <button class="button" (click)="ui.toggleUI()"> Hide UI </button>
+    </div>
+
+    <!-- Slider panel -->
+    <div id="slider-panel" class="panel no-selec" *ngIf="ui.showUI">
+        <div id="slider-header" class="panel-title">
+            <span class="button" [class.button-active]="ui.currentSlider == 'Time'" (click)="ui.currentSlider = 'Time'">
+                Time </span>
+            <span class="button" [class.button-active]="ui.currentSlider == 'Distance'"
+                (click)="ui.currentSlider = 'Distance'"> Distance </span>
+            <span class="button" [class.button-active]="ui.currentSlider == 'Zoom'" (click)="ui.currentSlider = 'Zoom'">
+                Zoom </span>
+        </div>
+        <div id="slider-body" class="panel-body">
+            <span> {{currentSlider}} </span>
+            <div *ngIf="ui.currentSlider == 'Time'" id="time-buttons-container">
+                <button class="button" [class.button-active]="sliderValue == REAL_TIME"
+                    (click)="sliderValue = REAL_TIME"> Realtime </button>
+                <button class="button" [class.button-active]="sliderValue == 0.167" (click)="sliderValue = 0.167">
+                    4h/s </button>
+                <button class="button" [class.button-active]="sliderValue == 1" (click)="sliderValue = 1"> 1d/s
+                </button>
+                <button class="button" [class.button-active]="sliderValue == 7" (click)="sliderValue = 7"> 7d/s
+                </button>
+                <button class="button" [class.button-active]="sliderValue == 365" (click)="sliderValue = 365">
+                    365d/s
+                </button>
+            </div>
+            <div *ngIf="ui.currentSlider == 'Distance'" id="time-buttons-container">
+                <button class="button" [class.button-active]="distanceRatio == 0.02" (click)="distanceRatio = 0.02">
+                    1:50 </button>
+                <button class="button" [class.button-active]="distanceRatio == 1" (click)="distanceRatio = 1">
+                    1:1
+                </button>
+                <button class="button" [class.button-active]="distanceRatio == 2" (click)="distanceRatio = 2">
+                    2:1
+                </button>
+            </div>
+            <div id="slider">
+                <ngx-slider *ngIf="ui.currentSlider == 'Zoom'" [(value)]="camera.zoom"
+                    [options]="zoomOptions"></ngx-slider>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact page -->
+    <div id=contact-container class="panel" *ngIf="ui.showContactPage && ui.showUI">
+        <h1 class="no-selec">Contact me</h1>
+        <p><span class="no-selec">Email:</span>&nbsp; jorrit.schepers1@gmail.com</p>
+        <a href="https://github.com/JorritSchepers" target="_blank" style="width: 7%">
+            <img class="no-selec"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2048px-Octicons-mark-github.svg.png"
+                style="width: 100%">
+        </a>
+    </div>
+
+    <!-- Settings panel -->
+    <div id="settings-panel" class="panel no-selec" *ngIf="ui.showSettings && ui.showUI">
+        <div class="settings-column">
+            <div class="settings-item"> Distance unit </div>
+            <div class="settings-item"> Bloom </div>
+            <div class="settings-item"> Draw orbits </div>
+            <div class="settings-item"> Draw flight path </div>
+            <div class="settings-item"> Compass </div>
+            <div class="settings-item"> Constellations viewer </div>
+        </div>
+        <div class="settings-column">
+            <div class="settings-item">
+                <button class="button" [class.button-active]="unit == 'km'" (click)="unit = 'km'"> Kilometer
+                </button>
+                <button class="button" [class.button-active]="unit == 'mi'" (click)="unit = 'mi'"> Mile
+                </button>
+                <button class="button" [class.button-active]="unit == 'AU'" (click)="unit = 'AU'"> AU </button>
+            </div>
+            <div class="settings-item">
+                <button class="button" [class.button-active]="showBloom" (click)="showBloom = true"> On
+                </button>
+                <button class="button" [class.button-active]="!showBloom" (click)="showBloom = false"> Off
+                </button>
+            </div>
+            <div class="settings-item">
+                <button class="button" [class.button-active]="useGuideLines" (click)="setGuideLines(true)"> On
+                </button>
+                <button class="button" [class.button-active]="!useGuideLines" (click)="setGuideLines(false)">
+                    Off
+                </button>
+            </div>
+            <div class="settings-item"> Work in progress </div>
+            <div class="settings-item"> Work in progress </div>
+            <div class="settings-item">
+                <button class="button" (click)="EnterConstellationsViewer()"> View </button>
+            </div>
+        </div>
+    </div>
+    <!-- </div> -->
+    <!-- </div> -->
+
+    <!-- Constellations viewer -->
+    <div id="nav-container" class="panel no-selec" *ngIf="viewer == 'constellations'">
+        <div class="panel-title">
+            <div style="cursor: default"> &nbsp; </div>
+            <span style="font-size: large;">Constellations</span>
+            <div (click)="ExitConstellationsViewer()"> x </div>
+        </div>
+        <div class="panel-body" style="flex-direction: column;">
+            <!-- Planets list -->
+            <div style="width: 100%; height: 100%;">
+                <!-- <div *ngIf="viewer == 'constellations'"> -->
+                <div *ngFor="let name of nightSky.constNamesStars" class="nav-list-item"
+                    (click)="targetConst = name[0]">
+                    <span>{{name[0]}}</span>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
     </div>
 </main>

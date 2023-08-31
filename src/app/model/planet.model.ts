@@ -26,6 +26,9 @@ export class Planet {
     ring: any;
     arc: number = Math.PI
     rotationSpeed: number;
+    discoveredBy: string;
+    discoveryYear: string;
+    yearAnnounced: string;
 
     constructor(app: AppComponent, name: string, radius: number, detail: number, color: number, distance: number, inclination: number, axis: number, isStar: boolean, speed: number, clockwise: boolean, textureMap: any, moonOf: Planet, rotationSpeed: number) {
 
@@ -83,10 +86,11 @@ export class Planet {
     }
 
     addMoon(name: string, radius: number, detail: number, color: number, distance: number, inclination: number, isStar: boolean,
-        speed: number, clockwise: boolean, textureMap: any): void {
+        speed: number, clockwise: boolean, textureMap: any): Planet {
         const moon = new Planet(this.app, name, radius / this.app.RADIUS_RATIO, detail, color, distance / this.app.DISTANCE_RATIO, inclination, 0, isStar, speed, clockwise, textureMap, this, 0)
         this.moons.push(moon)
         this.app.scene.add(moon.model)
+        return moon;
     }
 
     getInclination(): number {

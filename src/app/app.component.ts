@@ -12,7 +12,6 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { PlanetBuilderController } from './controller/PlanetBuilderController';
 import { NightSkyController } from './controller/NightSkyController';
 import { FlightController } from './controller/FlightController';
-import { HostListener } from '@angular/core';
 import { Moons } from "./../assets/moonsJson";
 
 const FOV: number = 40; // 40
@@ -31,8 +30,6 @@ const BLOOM_PARAMS = {
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    keys = []
-
     rayCast = false;
     viewer = "default";
 
@@ -118,6 +115,8 @@ export class AppComponent {
 
     old = this.timeRatio;
 
+    newSystemName: string = "";
+
     constructor() {
         this.setup()
     }
@@ -134,65 +133,46 @@ export class AppComponent {
     }
 
     private initTheSolarSystem(): void {
-        this.sun = this.addPlanet('Sun', SUN_RADIUS / this.SUN_RADIUS_RATIO, 40, 0, 0, 0, 0, true, 0, null, new THREE.TextureLoader().load('./solarsim/assets/maps/sun-map.jpg'), 28 * 24);
+        this.sun = this.addPlanet('Sun', SUN_RADIUS / this.SUN_RADIUS_RATIO, 40, 0, 0, 0, 0, true, 0, null, new THREE.TextureLoader().load('./assets/maps/sun-map.jpg'), 28 * 24);
         this.sun.model.layers.enable(BLOOM_SCENE)
-        this.addPlanet('Mercury', 2440, 20, 0x777777, 57910000, 3.38, 2, false, 88, false, new THREE.TextureLoader().load('./solarsim/assets/maps/mercury-map.jpg'), 59 * 24);
-        this.addPlanet('Venus', 6052, 20, 0x7A381C, 108200000, 3.86, 2.7, false, 225, true, new THREE.TextureLoader().load('./solarsim/assets/maps/venus-map.jpg'), 243 * 24);
-        let earth = this.addPlanet('Earth', 6371, 20, 0x243E49, 149600000, 7.155, 23.4, false, 365, false, new THREE.TextureLoader().load('./solarsim/assets/maps/earth-map2.jpg'), 24);
-        // earth.addMoon('Moon', 1737, 20, 0x777777, 384400, 5.14, false, 27, true, moonTextureMap)
-        let mars = this.addPlanet('Mars', 3390, 20, 0xAC6349, 227900000, 5.65, 25, false, 687, false, new THREE.TextureLoader().load('./solarsim/assets/maps/mars-map.jpg'), 24.6);
-        // mars.addMoon("Phobos", 11.1, 20, 0x777777, 9377, 1.093, false, 0.463, true, moonTextureMap)
-        // mars.addMoon("Deimons", 6.3, 20, 0x777777, 23460, 0.93, false, 5.44, true, moonTextureMap)
-        let jupiter = this.addPlanet('Jupiter', 69911, 20, 0x9F8E7A, 778500000, 6.09, 3, false, 4332, false, new THREE.TextureLoader().load('./solarsim/assets/maps/jupiter-map.jpg'), 9.5);
-        // jupiter.addMoon('Ganymede', 5268 / 2, 20, 0x999999, 1070412, 0.204, false, 7.1546, false, new THREE.TextureLoader().load('./solarsim/assets/maps/moon-map.jpg'))
-        // jupiter.addMoon('Callisto', 4820 / 2, 20, 0x555555, 1882709, 0.205, false, 16.689, false, new THREE.TextureLoader().load('./solarsim/assets/maps/moon-map.jpg'))
-        // jupiter.addMoon('Io', 3643 / 2, 20, 0xD0C757, 421700, 0.050, false, 1.7691, false, new THREE.TextureLoader().load('./solarsim/assets/maps/moon-map.jpg'))
-        // jupiter.addMoon('Europa', 3121 / 2, 20, 0x856033, 671034, 0.471, false, 3.5512, false, new THREE.TextureLoader().load('./solarsim/assets/maps/moon-map.jpg'))
-        let saturn = this.addPlanet('Saturn', 58232, 20, 0xB2915F, 1434000000, 5.51, 26.73, false, 10757, false, new THREE.TextureLoader().load('./solarsim/assets/maps/saturn-map.jpg'), 10.5);
-        saturn.addRing(136780, 136780 - 74500, new THREE.TextureLoader().load('./solarsim/assets/maps/rings.png'))
-        // saturn.addMoon("Titan", 5149 / 2, 20, 0x777777, 1221870, 0.349, false, 16, true, moonTextureMap)
-        // saturn.addMoon("Rhea", 1527 / 2, 20, 0x777777, 527108, 0.327, false, 4.5, true, moonTextureMap)
-        // saturn.addMoon("Lapetus", 1470 / 2, 20, 0x777777, 3560820, 15.470, false, 79, true, moonTextureMap)
-        // saturn.addMoon("Dione", 1123 / 2, 20, 0x777777, 377396, 0.002, false, 2.7, true, moonTextureMap)
-        // saturn.addMoon("Tethys", 1062 / 2, 20, 0x777777, 294619, 0.168, false, 1.9, true, moonTextureMap)
-        // saturn.addMoon("Enceladus", 504 / 2, 20, 0x777777, 237948, 0.010, false, 1.4, true, moonTextureMap)
-        // saturn.addMoon("Mimas", 396 / 2, 20, 0x777777, 185539, 1.566, false, 0.9, true, new THREE.TextureLoader().load('./solarsim/assets/maps/mimas-map.png'))
-        let uranus = this.addPlanet('Uranus', 25362, 20, 0x8EB2C4, 2871000000, 6.48, 97.77, false, 30687, false, new THREE.TextureLoader().load('./solarsim/assets/maps/uranus-map.jpg'), 7.25);
-        // uranus.addRing(103000, 103000 - 34890, new THREE.TextureLoader().load('./solarsim/assets/maps/uranus-rings.png'))
-        // uranus.addMoon("Titania", 1576 / 2, 20, 0x777777, 435910, 0.340, false, 8.7, true, moonTextureMap)
-        // uranus.addMoon("Oberon", 1522 / 2, 20, 0x777777, 583520, 0.058, false, 13.4, true, moonTextureMap)
-        // uranus.addMoon("Umbriel", 1169 / 2, 20, 0x777777, 266300, 0.205, false, 4.1, true, moonTextureMap)
-        // uranus.addMoon("Ariel", 1157 / 2, 20, 0x777777, 191020, 0.260, false, 2.5, true, moonTextureMap)
-        // uranus.addMoon("Miranda", 471 / 2, 20, 0x777777, 129390, 4.232, false, 1.4, true, moonTextureMap)
-        let neptune = this.addPlanet('Neptune', 24622, 20, 0x4662F6, 4495000000, 6.43, 28, false, 60190, false, new THREE.TextureLoader().load('./solarsim/assets/maps/neptune-map.jpg'), 16);
-        // neptune.addMoon("Triton", 2s705 / 2, 20, 0x777777, 354759, 180 - 156.865, false, 5.8, true, moonTextureMap)
+        this.addPlanet('Mercury', 2440, 20, 0x777777, 57910000, 3.38, 2, false, 88, false, new THREE.TextureLoader().load('./assets/maps/mercury-map.jpg'), 59 * 24);
+        this.addPlanet('Venus', 6052, 20, 0x7A381C, 108200000, 3.86, 2.7, false, 225, true, new THREE.TextureLoader().load('./assets/maps/venus-map.jpg'), 243 * 24);
+        this.addPlanet('Earth', 6371, 20, 0x243E49, 149600000, 7.155, 23.4, false, 365, false, new THREE.TextureLoader().load('./assets/maps/earth-map2.jpg'), 24);
+        this.addPlanet('Mars', 3390, 20, 0xAC6349, 227900000, 5.65, 25, false, 687, false, new THREE.TextureLoader().load('./assets/maps/mars-map.jpg'), 24.6);
+        this.addPlanet('Jupiter', 69911, 20, 0x9F8E7A, 778500000, 6.09, 3, false, 4332, false, new THREE.TextureLoader().load('./assets/maps/jupiter-map.jpg'), 9.5);
+        const saturn = this.addPlanet('Saturn', 58232, 20, 0xB2915F, 1434000000, 5.51, 26.73, false, 10757, false, new THREE.TextureLoader().load('./assets/maps/saturn-map.jpg'), 10.5);
+        saturn.addRing(136780, 136780 - 74500, new THREE.TextureLoader().load('./assets/maps/rings.png'))
+        this.addPlanet('Uranus', 25362, 20, 0x8EB2C4, 2871000000, 6.48, 97.77, false, 30687, false, new THREE.TextureLoader().load('./assets/maps/uranus-map.jpg'), 7.25);
+        this.addPlanet('Neptune', 24622, 20, 0x4662F6, 4495000000, 6.43, 28, false, 60190, false, new THREE.TextureLoader().load('./assets/maps/neptune-map.jpg'), 16);
 
         this.addAllMoons();
     }
 
     addAllMoons() {
-        const moonTextureMap = new THREE.TextureLoader().load('./solarsim/assets/maps/moon-map.jpg')
-
-        // let m = new Moons().moons[3];
-
-        // const planet = this.systems[this.currentSystem].planets.find((s) => s.name === m.Parent)
-
-        // m.DistanceFromParent = +(m.DistanceFromParent.toString().replace(",", ""))
-
-        // planet.addMoon(m.Name, +m.Radius, 20, 0x777777, +m.DistanceFromParent, 0, false, +m.OrbitalPeriod, true, moonTextureMap)
+        const moonTextureMap = new THREE.TextureLoader().load('./assets/maps/moon-map.jpg')
 
         new Moons().moons.forEach((m) => {
 
-            // for (let i = 0; i < 100; i++) {
-            // const m = new Moons().moons[i];
             const planet = this.systems[this.currentSystem].planets.find((s) => s.name === m.Parent)
             if (planet == null) {
                 return;
             }
             m.DistanceFromParent = (m.DistanceFromParent.toString().replace(",", "").replace(",", ""))
             m.OrbitalPeriod = (m.OrbitalPeriod.toString().replace(",", "").replace(",", ""))
-            planet.addMoon(m.Name, +m.Radius, 20, 0x777777, +m.DistanceFromParent, 0, false, +m.OrbitalPeriod, true, moonTextureMap)
-            // }
+            let moon = planet.addMoon(m.Name, +m.Radius, 20, 0x777777, +m.DistanceFromParent, 0, false, +m.OrbitalPeriod, true, moonTextureMap)
+
+            if (m['Discovered by'] != "—") {
+                let s = m['Discovered by']
+
+                if (s.length > 16) {
+                    s = s.substring(0, 16) + "...";
+                }
+
+                moon.discoveredBy = s
+            }
+
+            moon.discoveryYear = m['Discovery year'].toString();
+            moon.yearAnnounced = m['Year Announced'].toString();
         });
     }
 
@@ -243,19 +223,10 @@ export class AppComponent {
                 app.timeRatio = app.sliderValue;
                 if (app.pov) {
                     app.povCamera()
-                } else if (app.flightMode) {
-                    if (app.fc.target.x == -1) {
-                        app.fc.setTarget(app.controls.target.x, app.controls.target.y, app.controls.target.z)
-                    }
-                    app.fc.control(app.keys);
-                }
-                else if (app.followPlanetName != null) app.followPlanet(app.followPlanetName);
-                // else if (app.viewer == "constellations") {
+                } else if (app.followPlanetName != null) app.followPlanet(app.followPlanetName);
                 else if (app.targetConst != null) {
                     app.moveCamToConstellation();
                 }
-                // }
-
             }
             if (app.sun != null) app.sun.model.rotation.y += (app.timeRatio / 1000);
             if (app.lightsOn) app.flashlight.position.set(app.camera.position.x, app.camera.position.y, app.camera.position.z)
@@ -304,12 +275,6 @@ export class AppComponent {
         this.controls.target.x += (destination[0] - this.controls.target.x) / 100
         this.controls.target.y += (destination[1] - this.controls.target.y) / 100
         this.controls.target.z += (destination[2] - this.controls.target.z) / 100
-        // this.camera.lookAt(this.controls.target)
-        // console.log(this.controls.target)
-
-        // if (destination[0] - this.camera.position.x <= 100 && destination[0] - this.camera.position.x >= -100) {
-        //     this.targetConst = null;
-        // }
     }
 
     getConstellationCenter(name) {
@@ -419,15 +384,16 @@ export class AppComponent {
         return planet;
     }
 
-    addNewSystem(): void {
-        this.addSystem("New Solarsystem " + this.systemCounter);
-        this.systemCounter++;
-    }
-
     addSystem(systemName: string): void {
+        if (systemName == "") {
+            systemName = "New Solarsystem " + this.systemCounter;
+            this.systemCounter++;
+        }
+
         this.systems.push(new Solarsystem(systemName))
         this.flyToPlanet(this.sun.name)
         this.switchToSystem(this.systems.length - 1)
+        this.ui.showSystemNameInput = false;
     }
 
     switchToSystem(systemIndex: number): void {
@@ -458,11 +424,10 @@ export class AppComponent {
         // move the camera to the center of the scene
         this.camera.position.set(0, 0, 0);
         // this.camera.lookAt(0, 100, 0);
-        this.targetConst = "Ursa Major"
         this.followPlanetName = null;
         // Disable orbit controls
         this.controls.enabled = false;
-
+        this.ui.showUI = false;
     }
 
     ExitConstellationsViewer(): void {
@@ -470,6 +435,7 @@ export class AppComponent {
         this.targetConst = null;
         this.controls.enabled = true;
         this.flyToPlanet(this.sun.name)
+        this.ui.showUI = true;
     }
 
     addAllPlanetsToScene(): void {
@@ -685,14 +651,13 @@ export class AppComponent {
         }
     }
 
-    @HostListener('document:keypress', ['$event'])
-    handleKeyboardEventDown(event: KeyboardEvent) {
-        if (this.keys.find((k) => k == event.key) != null) return;
-        this.keys.push(event.key)
-    }
+    openPlanetBuilder() {
+        this.ui.showSettings = false;
+        this.ui.showInfoPanel = false;
+        this.ui.showPlanetbuilder = true;
 
-    @HostListener('document:keyup', ['$event'])
-    handleKeyboardEventUp(event: KeyboardEvent) {
-        this.keys = this.keys.filter((k) => k != event.key)
+        setTimeout(() => {
+            this.pb.generateRandomValues();
+        }, 10);
     }
 }

@@ -9,15 +9,15 @@ export class NightSkyController {
     app: AppComponent;
     stars: Star[] = [];
     constFocusHips = [
-        59774, // Ursa Major X
-        77055, // Ursa Minor X
-        4427, // Cassiopeia X
-        26311, // Orion X
-        50583, // Leo X
-        80331, // Draco
-        82396, // Scorpius X
-        100453, // Cygnus X
-        33152 // Canis Major X
+        59774, // Ursa Major 
+        77055, // Ursa Minor 
+        4427, // Cassiopeia 
+        25336, // Orion  old: 26311
+        54872, // Leo old: 50583
+        83895, // Draco old: 80331
+        82396, // Scorpius 
+        100453, // Cygnus 
+        33152 // Canis Major 
     ];
 
     constNamesStars: NamesStars[] = [
@@ -52,7 +52,7 @@ export class NightSkyController {
     constellations = [];
     n = 1;
     cn = 0;
-    map: any = new THREE.TextureLoader().load('./solarsim/assets/maps/star-map.png')
+    map: any = new THREE.TextureLoader().load('./assets/maps/star-map.png')
 
     constructor(app: AppComponent) {
         this.app = app;
@@ -61,32 +61,18 @@ export class NightSkyController {
     public init(): void {
         new Stars().stars.forEach((s) => {
             const threshold = 4;
-            // const red = "rgb(255, 150, 150)"
 
+            // let factor = Math.abs(s.mag - 7.3) / 6.3
 
-            // const yellow = "rgb(255,255,100)"
-            const blueString = "rgb(180, 180, 255)"
+            // let red = 133 + Math.round(factor * 67)
+            // let green = 58 + Math.round(factor * 182)
+            // let blue = 58 + Math.round(factor * 197)
 
-            // let colorString = yellow
-            // if (s.mag < threshold) colorString = blue
+            // let colorString = "rgb(" + red + "," + green + "," + blue + ")"
 
-            let colorString = blueString
-            if (s.mag > threshold) {
-                const score = 1 / s.mag;
-
-                let red = 255 - Math.round((score * 200))
-                let green = 255 - Math.round((score * 200))
-                let blue = 0 + Math.round((score * 255))
-
-                colorString = "rgb(" + red + "," + green + "," + blue + ")"
-            }
-
-            // let colorString = red
-
-
+            let colorString = "rgb(200, 240, 255)";
 
             const size = (1 / s.mag) * 30000000000 * 5 // 30B
-            // const g = new THREE.SphereGeometry(size, 10, 10);
             const g = new THREE.BoxGeometry(size, size, size)
             const m = new THREE.MeshBasicMaterial({
                 color: colorString,

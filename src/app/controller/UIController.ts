@@ -10,6 +10,7 @@ export class UIController {
     showSettings: boolean = false;
     showPlanetbuilder: boolean = false;
     showConstellations: boolean = true;
+    showSystemNameInput: boolean = false;
 
     mobile: boolean = false;
     navCurrentPage: number = 1; // 0=Systems, 1=Planets, 2=Moons
@@ -42,8 +43,19 @@ export class UIController {
 
     toggleConstellations(): void {
         this.showConstellations = !this.showConstellations;
-        if (this.showConstellations) this.app.nightSky.showConstellations();
-        else this.app.nightSky.removeConstellations();
+        if (this.showConstellations) {
+            this.showNav = false;
+            this.showContactPage = false;
+            this.showInfoPanel = false;
+            this.showPlanetbuilder = false;
+            this.showSettings = false;
+            console.log(this.showNav)
+            this.app.nightSky.showConstellations();
+        }
+        else {
+            this.app.nightSky.removeConstellations();
+            this.showNav = true;
+        }
     }
 
     transformHoursToTime(hours: number): string {

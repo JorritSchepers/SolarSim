@@ -9,7 +9,7 @@ main {
     display: flex;
     top: 0;
     left: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Exo 2', Arial, Helvetica, sans-serif;
 
     --border-radius: 20px;
     --ui-base-opacity: 0.95;
@@ -41,10 +41,10 @@ main {
 /*============================================================================================================== General */
 
 #contact-container {
-    width: 56vw;
-    height: 72vh;
-    top: 14vh;
-    left: 22vw;
+    width: 50vw;
+    height: 60vh;
+    top: 20vh;
+    left: 25vw;
     justify-content: center;
     border-radius: var(--border-radius);
 }
@@ -60,12 +60,18 @@ main {
 
 .panel {
     position: absolute;
-    background-color: var(--bg-color);
+    /* background-color: var(--bg-color); */
     color: snow;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0px 5px 7px #151515;
+    /* box-shadow: 0px 5px 7px #151515; */
+
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    border-radius: 8px;
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .panel-title {
@@ -212,12 +218,12 @@ main {
 
 #planetbuilder-container {
     height: var(--nav-height);
-    width: 40vw;
+    width: 30vw;
     top: calc((100vh - var(--nav-height)) / 2);
-    left: calc(var(--nav-width) - var(--border-radius));
-    border-top-right-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
-    border-left: var(--border-radius) solid var(--bg-color);
+    left: calc(70vw - 2px);
+    border-radius: var(--border-radius);
+    /* border-left: var(--border-radius) solid var(--bg-color); */
+    background: linear-gradient(225deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
 }
 
 #planetbuilder-container .panel-body {
@@ -296,9 +302,10 @@ main {
     width: 22vw;
     height: 60vh;
     top: 20vh;
-    left: 78vw;
+    left: calc(78vw - 2px);
     border-top-left-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
+    /* animation: appear-from-right .5s; */
 }
 
 .info-column {
@@ -326,21 +333,22 @@ main {
 /*=========================================================================================================== Info Panel */
 
 #button-container {
-    width: 20vw;
+    width: 25vw;
     height: 18vh;
     position: fixed;
     bottom: env(safe-area-inset-bottom);
-    left: 80vw;
+    left: 75vw;
     border-top-left-radius: var(--border-radius);
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
+    background: linear-gradient(225deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
 }
 
 .button {
-    --button-size: 4.5vw;
+    --button-size: 5.5vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -351,6 +359,9 @@ main {
     border: none;
     box-shadow: 0px 5px 7px #151515;
     cursor: pointer;
+    font-family: 'Exo 2';
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.00));
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .button:hover {
@@ -360,8 +371,10 @@ main {
 }
 
 .button-active {
-    background-image: linear-gradient(to top, var(--button-bg-color), cyan 0%, var(--button-bg-color) 80%);
-    box-shadow: 0px 5px 7px darkcyan;
+    /* background-image: linear-gradient(to top, var(--button-bg-color), cyan 0%, darkcyan, var(--button-bg-color) 70%); */
+    /* background-image: radial-gradient(farthest-corner at 50% 150%, cyan, darkcyan, var(--button-bg-color), var(--button-bg-color)); */
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.50), rgba(0, 255, 255, 0));
+    box-shadow: -3px -3px 5px darkcyan;
 }
 
 #button-container .button:first-child {
@@ -424,6 +437,8 @@ main {
     flex-direction: row;
     justify-content: center;
     z-index: 10;
+    border-left: none;
+    border-right: none;
 }
 
 #header div {
@@ -455,7 +470,7 @@ main {
     width: 30vw;
     height: 13vh;
     left: 35vw;
-    top: 87vh;
+    top: calc(87vh - 2px);
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
 }
@@ -529,23 +544,24 @@ main {
 /*========================================================================================================= Slider Panel */
 
 #settings-panel {
-    width: 40vw;
-    height: 50vh;
+    width: 30vw;
+    height: 35vh;
     position: absolute;
-    left: 60vw;
-    top: 4vh;
+    left: calc(70vw - 2px);
+    top: 4.2vh;
+    border-top-left-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
     flex-direction: row;
-    animation: settingsShow var(--animation-Speed);
+    /* animation: appear-from-right var(--animation-Speed); */
 }
 
-@keyframes settingsShow {
+@keyframes appear-from-right {
     from {
-        top: -50vh;
+        transform: translateX(100%);
     }
 
     to {
-        top: 4vh;
+        transform: translateX(0%);
     }
 }
 
@@ -556,17 +572,17 @@ main {
 }
 
 .settings-column:first-child {
-    width: 35%;
+    width: 45%;
 }
 
 .settings-column:last-child {
-    width: 65%;
+    width: 55%;
 }
 
 .settings-item {
     display: flex;
     flex-direction: row;
-    height: 10%;
+    height: 16%;
     width: 100%;
     justify-content: center;
     align-items: center;
@@ -579,7 +595,7 @@ main {
 .settings-item .button {
     height: auto;
     padding: 6px;
-    width: 25%;
+    width: 30%;
 }
 
 .settings-item .button:first-child {
@@ -601,3 +617,17 @@ main {
 }
 
 /*======================================================================================================= Settings Panel */
+
+#system-name-input {
+    background-color: rgba(0, 0, 0, 0);
+    height: 80%;
+    font-size: large;
+    color: snow;
+    font-family: 'Exo 2', sans-serif;
+    left: 0;
+    margin-left: 1vw;
+    border: 0;
+    padding: 0;
+}
+
+/*======================================================================================================= System Builder */
