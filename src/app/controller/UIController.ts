@@ -11,10 +11,10 @@ export class UIController {
     showPlanetbuilder: boolean = false;
     showConstellations: boolean = true;
     showSystemNameInput: boolean = false;
+    showTimeControls: boolean = false;
 
     mobile: boolean = false;
     navCurrentPage: number = 1; // 0=Systems, 1=Planets, 2=Moons
-    currentSlider: string = "Time"
 
     constructor(app: AppComponent) {
         this.app = app;
@@ -94,3 +94,4 @@ export class UIController {
         return time;
     }
 }
+

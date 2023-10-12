@@ -1,12 +1,12 @@
 body {
     margin: 0;
     background-color: black;
-}  
+}
 
 .ngx-slider .ngx-slider-bubble {
     color: snow !important;
 }
-  
+
 .ngx-slider .ngx-slider-pointer {
     background-color: #00dddd !important;
 }

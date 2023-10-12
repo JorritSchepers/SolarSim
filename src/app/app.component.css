@@ -23,15 +23,23 @@ main {
     overflow: none;
 }
 
+input {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.15));
+    border-radius: 8px;
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: snow;
+    font-family: 'Exo 2';
+}
+
+
+
 #container {
     position: fixed;
     display: flex;
     top: 0;
     left: 0;
     opacity: var(--ui-base-opacity);
-    /* background-color: red;
-    height: calc(100vh - env(safe-area-inset-bottom));
-    width: 100vw; */
 }
 
 .no-selec {
@@ -60,12 +68,10 @@ main {
 
 .panel {
     position: absolute;
-    /* background-color: var(--bg-color); */
     color: snow;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* box-shadow: 0px 5px 7px #151515; */
 
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
     border-radius: 8px;
@@ -126,17 +132,47 @@ main {
     display: flex;
     align-items: center;
     cursor: pointer;
+    justify-content: space-between;
 }
 
-.nav-list-item span {
+.nav-list-item-name {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    width: calc(100% - 2vw - 30px);
+}
+
+.nav-list-item-name span {
     margin-left: 1vw;
 }
 
 .nav-list-item:hover {
     color: var(--hl-color);
-    border: 2px solid cyan;
+    /* border: 2px solid cyan; */
     text-shadow: 1px 1px 1px darkcyan;
     font-size: large;
+    /* background: linear-gradient(90deg, cyan, darkcyan, rgba(0, 0, 0, 0)); */
+    background-image: radial-gradient(farthest-corner at -200% 55%, cyan, rgba(0, 0, 0, 0) 80%);
+}
+
+.delete-nav-list-item-button {
+    --size: calc(2vw + 30px);
+    height: var(--size);
+    width: var(--size);
+    justify-content: center;
+    align-items: center;
+    color: snow !important;
+    text-shadow: none !important;
+    display: none;
+}
+
+.nav-list-item:hover .delete-nav-list-item-button {
+    display: flex;
+}
+
+.delete-nav-list-item-button:hover {
+    color: cyan !important;
+    text-shadow: 1px 1px 2px darkcyan !important;
 }
 
 .nav-button {
@@ -152,16 +188,11 @@ main {
 }
 
 #nav-open {
-    /* top: calc(100vh - var(--border-radius) - env(safe-area-inser-buttom)); */
-    /* bottom: calc(env(safe-area-inser-buttom) + var(--border-radius)); */
-    /* bottom: env(safe-area-inset-bottom); */
     position: fixed;
     bottom: calc(10vh + env(safe-area-inset-bottom));
 }
 
 #nav-close {
-    /* top: calc(90vh - 60vh - var(--border-radius)); */
-    /* bottom: calc(env(safe-area-inser-buttom) + var(--border-radius) + 60vh); */
     position: fixed;
     bottom: calc(70vh + env(safe-area-inset-bottom));
 }
@@ -222,7 +253,6 @@ main {
     top: calc((100vh - var(--nav-height)) / 2);
     left: calc(70vw - 2px);
     border-radius: var(--border-radius);
-    /* border-left: var(--border-radius) solid var(--bg-color); */
     background: linear-gradient(225deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
 }
 
@@ -278,15 +308,8 @@ main {
 }
 
 .planetbuilder-item input {
-    background: #aaa;
-    height: calc(var(--border-radius)*2);
-    border-radius: var(--border-radius);
-    border: none;
+    height: 30px;
     width: 50%;
-}
-
-.planetbuilder-item input:hover {
-    background: #ccc;
 }
 
 @media only screen and (max-width: 768px) {
@@ -305,7 +328,6 @@ main {
     left: calc(78vw - 2px);
     border-top-left-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
-    /* animation: appear-from-right .5s; */
 }
 
 .info-column {
@@ -333,27 +355,27 @@ main {
 /*=========================================================================================================== Info Panel */
 
 #button-container {
-    width: 25vw;
-    height: 18vh;
+    width: 30vw;
+    height: 14vh;
     position: fixed;
     bottom: env(safe-area-inset-bottom);
-    left: 75vw;
+    left: calc((100vw - 30vw - 2px) / 2);
     border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
-    background: linear-gradient(225deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
 }
 
 .button {
-    --button-size: 5.5vw;
+    --button-size: 7vw;
     display: flex;
     justify-content: center;
     align-items: center;
     width: var(--button-size);
-    height: calc(calc(18vh - 2vw) / 2);
+    height: calc(calc(14vh - 2vw) / 2);
     background-color: var(--button-bg-color);
     color: snow;
     border: none;
@@ -371,14 +393,16 @@ main {
 }
 
 .button-active {
-    /* background-image: linear-gradient(to top, var(--button-bg-color), cyan 0%, darkcyan, var(--button-bg-color) 70%); */
-    /* background-image: radial-gradient(farthest-corner at 50% 150%, cyan, darkcyan, var(--button-bg-color), var(--button-bg-color)); */
     background: linear-gradient(135deg, rgba(0, 255, 255, 0.50), rgba(0, 255, 255, 0));
     box-shadow: -3px -3px 5px darkcyan;
 }
 
 #button-container .button:first-child {
     border-top-left-radius: var(--border-radius);
+}
+
+#button-container .button:nth-child(4) {
+    border-top-right-radius: var(--border-radius);
 }
 
 #ui-toggle-button {
@@ -427,12 +451,8 @@ main {
 /*========================================================================================================= Button Panel */
 
 #header {
-    /* left: 38vw; */
     width: 100vw;
-    /* 24vw */
     height: 4vh;
-    /* border-bottom-left-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius); */
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -468,76 +488,21 @@ main {
 
 #slider-panel {
     width: 30vw;
-    height: 13vh;
+    height: 10vh;
     left: 35vw;
-    top: calc(87vh - 2px);
-    border-top-left-radius: var(--border-radius);
-    border-top-right-radius: var(--border-radius);
-}
-
-#slider-header {
-    height: 30%;
-    font-size: medium;
+    top: calc(90vh - 2px);
+    background-image: none !important;
     border: none;
-}
-
-#slider-header span {
-    height: 100%;
-}
-
-#slider-header span:first-child {
-    border-top-left-radius: var(--border-radius);
-}
-
-#slider-header span:last-child {
-    border-top-right-radius: var(--border-radius);
-}
-
-#slider-body {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#slider-body span {
-    margin-top: 7px;
+    backdrop-filter: none;
 }
 
 #slider {
     width: 90%;
 }
 
-#time-buttons-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    height: 50%;
-}
-
-#time-buttons-container button {
-    width: 20%;
-    height: 100%;
-}
-
-#time-buttons-container button:first-child {
-    border-top-left-radius: var(--border-radius);
-    border-bottom-left-radius: var(--border-radius);
-}
-
-#time-buttons-container button:last-child {
-    border-top-right-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
-}
-
 @media only screen and (max-width: 768px) {
     #slider-panel {
         display: none;
-        /* width: 100vw;
-    left: 0;
-    top: 60vh;
-    border-radius: var(--border-radius); */
     }
 }
 
@@ -552,17 +517,6 @@ main {
     border-top-left-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
     flex-direction: row;
-    /* animation: appear-from-right var(--animation-Speed); */
-}
-
-@keyframes appear-from-right {
-    from {
-        transform: translateX(100%);
-    }
-
-    to {
-        transform: translateX(0%);
-    }
 }
 
 .settings-column {
@@ -631,3 +585,50 @@ main {
 }
 
 /*======================================================================================================= System Builder */
+
+.time-button {
+    --w: 100px;
+    cursor: pointer;
+    width: var(--w);
+    left: calc((100vw - var(--w)) / 2);
+}
+
+#time-open {
+    top: 4vh;
+}
+
+#time-close {
+    top: 12vh;
+}
+
+#time-controls-container {
+    --w: 25vw;
+    width: var(--w);
+    height: 8vh;
+    top: 4vh;
+    left: calc((100vw - var(--w)) / 2);
+}
+
+#time-buttons-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 70%;
+}
+
+#time-buttons-container button {
+    width: 20%;
+    height: 100%;
+}
+
+#time-buttons-container button:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+#time-buttons-container button:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}

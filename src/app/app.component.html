@@ -8,14 +8,48 @@
     <!-- Header -->
     <div id="header" class="panel no-selec" *ngIf="ui.showUI">
         <div>
-            <span id="distance-display"> Distance to the sun: {{getDistanceDisplay(unit)}} {{unit}} </span>
+            <span> Distance to the sun: {{getDistanceDisplay(unit)}} {{unit}} </span>
         </div>
+        <div></div>
         <div>
-            <span id="day-display"> Day: {{dayDisplay}} </span>
+            <span> Day: {{dayDisplay}} </span>
+        </div>
+        <div style="display: flex; flex-direction: row; justify-content: start;">
+            <span>FOV: {{camera.fov}}</span>
+            <span>&nbsp; &nbsp;</span>
+            <span (click)="camera.fov = 40" *ngIf="camera.fov != 40" style="cursor:pointer"> [Reset] </span>
         </div>
         <div style="cursor: pointer;">
-            <span id="distance-display" (click)="ui.toggleSettings()"> Settings </span>
+            <span (click)="ui.toggleSettings()"> Settings </span>
         </div>
+    </div>
+
+    <!-- Time buttons -->
+    <div class="time-button panel no-selec" id="time-open" (click)="ui.showTimeControls = true"
+        *ngIf="!ui.showTimeControls && ui.showUI;">
+        <div>&#x25BC;</div>
+    </div>
+    <div class="time-button panel no-selec" id="time-close" (click)="ui.showTimeControls = false"
+        *ngIf="ui.showTimeControls && ui.showUI;">
+        <div>&#x25B2;</div>
+    </div>
+    <div id="time-controls-container" class="panel no-selec" *ngIf="ui.showUI && ui.showTimeControls"
+        style="justify-content: center;">
+        <!-- <div class="panel-body" *ngIf="ui.showTimeControls"> -->
+        <div id="time-buttons-container">
+            <button class="button" [class.button-active]="sliderValue == REAL_TIME" (click)="sliderValue = REAL_TIME">
+                Realtime </button>
+            <button class="button" [class.button-active]="sliderValue == 0.167" (click)="sliderValue = 0.167">
+                4h/s </button>
+            <button class="button" [class.button-active]="sliderValue == 1" (click)="sliderValue = 1"> 1d/s
+            </button>
+            <button class="button" [class.button-active]="sliderValue == 7" (click)="sliderValue = 7"> 7d/s
+            </button>
+            <button class="button" [class.button-active]="sliderValue == 365" (click)="sliderValue = 365">
+                365d/s
+            </button>
+        </div>
+        <!-- </div> -->
     </div>
 
     <!-- Navigator -->
@@ -41,9 +75,11 @@
         <div class="panel-body" style="flex-direction: column;">
             <!-- Systems list -->
             <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 0">
-                <div class="nav-list-item" *ngFor="let system of systems"
-                    (click)="switchToSystem(getSystemIndex(system.name))">
-                    <span>{{system.name}} ({{system.planets.length}})</span>
+                <div class="nav-list-item" *ngFor="let system of systems">
+                    <div class="nav-list-item-name" (click)="switchToSystem(getSystemIndex(system.name))">
+                        <span>{{system.name}} ({{system.planets.length}})</span>
+                    </div>
+                    <div class="delete-nav-list-item-button"> X </div>
                 </div>
                 <div class="nav-list-item" (click)="ui.showSystemNameInput = true"
                     style="justify-content: center; font-size: 200%">
@@ -57,11 +93,13 @@
             <!-- Planets list -->
             <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 1">
                 <div class="nav-list-item" (click)="flyToPlanet(sun.name)">
-                    <span>{{sun.name}}</span>
+                    <span style="margin-left: 1vw;">{{sun.name}}</span>
                 </div>
-                <div class="nav-list-item" *ngFor="let planet of systems[currentSystem].planets"
-                    (click)="flyToPlanet(planet.name)">
-                    <span>{{planet.name}}</span>
+                <div class="nav-list-item" *ngFor="let planet of systems[currentSystem].planets">
+                    <div class="nav-list-item-name" (click)="flyToPlanet(planet.name)">
+                        <span>{{planet.name}}</span>
+                    </div>
+                    <div class="delete-nav-list-item-button" (click)="deletePlanet(planet.name)"> X </div>
                 </div>
                 <div class="nav-list-item" (click)="openPlanetBuilder()"
                     style="justify-content: center; font-size: 200%;">
@@ -73,15 +111,19 @@
             <div style="width: 100%; height: 100%;" *ngIf="ui.navCurrentPage == 2">
                 <div style="width: 100%; height: 100%; overflow-x: hidden;"
                     *ngIf="getPlanet(followPlanetName).moonOf == null">
-                    <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moons"
-                        (click)="flyToPlanet(moon.name)">
-                        <span>{{moon.name}}</span>
+                    <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moons">
+                        <div class="nav-list-item-name" (click)="flyToPlanet(moon.name)">
+                            <span>{{moon.name}}</span>
+                        </div>
+                        <div class="delete-nav-list-item-button"> X </div>
                     </div>
                 </div>
                 <div style="width: 100%; height: 100%;" *ngIf="getPlanet(followPlanetName).moonOf != null">
-                    <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moonOf.moons"
-                        (click)="flyToPlanet(moon.name)">
-                        <span>{{moon.name}}</span>
+                    <div class="nav-list-item" *ngFor="let moon of getPlanet(followPlanetName).moonOf.moons">
+                        <div class="nav-list-item-name" (click)="flyToPlanet(moon.name)">
+                            <span>{{moon.name}}</span>
+                        </div>
+                        <div class="delete-nav-list-item-button"> X </div>
                     </div>
                 </div>
             </div>
@@ -231,48 +273,6 @@
         <button class="button" [class.button-active]="ui.showConstellations" (click)="ui.toggleConstellations()">
             Constellations </button>
         <button class="button" (click)="ui.toggleUI()"> Hide UI </button>
-    </div>
-
-    <!-- Slider panel -->
-    <div id="slider-panel" class="panel no-selec" *ngIf="ui.showUI">
-        <div id="slider-header" class="panel-title">
-            <span class="button" [class.button-active]="ui.currentSlider == 'Time'" (click)="ui.currentSlider = 'Time'">
-                Time </span>
-            <span class="button" [class.button-active]="ui.currentSlider == 'Distance'"
-                (click)="ui.currentSlider = 'Distance'"> Distance </span>
-            <span class="button" [class.button-active]="ui.currentSlider == 'Zoom'" (click)="ui.currentSlider = 'Zoom'">
-                Zoom </span>
-        </div>
-        <div id="slider-body" class="panel-body">
-            <span> {{currentSlider}} </span>
-            <div *ngIf="ui.currentSlider == 'Time'" id="time-buttons-container">
-                <button class="button" [class.button-active]="sliderValue == REAL_TIME"
-                    (click)="sliderValue = REAL_TIME"> Realtime </button>
-                <button class="button" [class.button-active]="sliderValue == 0.167" (click)="sliderValue = 0.167">
-                    4h/s </button>
-                <button class="button" [class.button-active]="sliderValue == 1" (click)="sliderValue = 1"> 1d/s
-                </button>
-                <button class="button" [class.button-active]="sliderValue == 7" (click)="sliderValue = 7"> 7d/s
-                </button>
-                <button class="button" [class.button-active]="sliderValue == 365" (click)="sliderValue = 365">
-                    365d/s
-                </button>
-            </div>
-            <div *ngIf="ui.currentSlider == 'Distance'" id="time-buttons-container">
-                <button class="button" [class.button-active]="distanceRatio == 0.02" (click)="distanceRatio = 0.02">
-                    1:50 </button>
-                <button class="button" [class.button-active]="distanceRatio == 1" (click)="distanceRatio = 1">
-                    1:1
-                </button>
-                <button class="button" [class.button-active]="distanceRatio == 2" (click)="distanceRatio = 2">
-                    2:1
-                </button>
-            </div>
-            <div id="slider">
-                <ngx-slider *ngIf="ui.currentSlider == 'Zoom'" [(value)]="camera.zoom"
-                    [options]="zoomOptions"></ngx-slider>
-            </div>
-        </div>
     </div>
 
     <!-- Contact page -->

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Planet } from './model/planet.model';
@@ -104,12 +104,6 @@ export class AppComponent {
         step: 0.02
     };
 
-    zoomOptions: Options = {
-        floor: 0.5,
-        ceil: 10,
-        step: 0.5
-    };
-
     unit: string = "AU"
     showBloom: boolean = false;
 
@@ -144,6 +138,7 @@ export class AppComponent {
         saturn.addRing(136780, 136780 - 74500, new THREE.TextureLoader().load('./assets/maps/rings.png'))
         this.addPlanet('Uranus', 25362, 20, 0x8EB2C4, 2871000000, 6.48, 97.77, false, 30687, false, new THREE.TextureLoader().load('./assets/maps/uranus-map.jpg'), 7.25);
         this.addPlanet('Neptune', 24622, 20, 0x4662F6, 4495000000, 6.43, 28, false, 60190, false, new THREE.TextureLoader().load('./assets/maps/neptune-map.jpg'), 16);
+        this.addPlanet('Pluto', 2377 / 2, 20, 0xC9AD8C, 5900000000, 17, 57, false, 248 * 365, false, new THREE.TextureLoader().load('./assets/maps/pluto-map.jpg'), 6387 * 24);
 
         this.addAllMoons();
     }
@@ -659,5 +654,53 @@ export class AppComponent {
         setTimeout(() => {
             this.pb.generateRandomValues();
         }, 10);
+    }
+
+    @HostListener('contextmenu')
+    preventContextMenu() {
+        return false;
+    }
+
+    // Detect when I press +, zoom in the fov
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.key == "=") {
+            this.camera.fov -= 1;
+            this.camera.updateProjectionMatrix();
+        }
+        if (event.key == "-") {
+            this.camera.fov += 1;
+            this.camera.updateProjectionMatrix();
+        }
+    }
+
+    deletePlanet(name: string) {
+        const planet = this.getPlanet(name)
+
+        planet.moons.forEach(m => {
+            this.deleteMoon(m)
+        })
+
+        this.systems[this.currentSystem].planets = this.systems[this.currentSystem].planets.filter(p => p != planet)
+
+        this.scene.remove(planet.guideLine)
+        this.scene.remove(planet.model)
+
+        if (this.followPlanetName == name) {
+            this.followPlanetName = null;
+            // this.flyToPlanet("sun");
+            this.ui.showInfoPanel = false;
+        }
+    }
+
+    deleteMoonName(moon: string) {
+        const m = this.getPlanet(moon)
+        this.deleteMoon(m)
+    }
+
+    deleteMoon(moon: Planet) {
+        const m = this.getPlanet(moon.name)
+        this.scene.remove(m.guideLine)
+        this.scene.remove(m.model)
     }
 }

@@ -31,7 +31,6 @@ export class Planet {
     yearAnnounced: string;
 
     constructor(app: AppComponent, name: string, radius: number, detail: number, color: number, distance: number, inclination: number, axis: number, isStar: boolean, speed: number, clockwise: boolean, textureMap: any, moonOf: Planet, rotationSpeed: number) {
-
         detail = 100;
 
         this.app = app
