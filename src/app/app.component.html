@@ -54,7 +54,7 @@
 
     <!-- Navigator -->
     <div class="nav-button panel no-selec" id="nav-open"
-        (click)="ui.showNav = true; showContactPage = false; showInfoPanel = false;" *ngIf="!ui.showNav">
+        (click)="ui.showNav = true; ui.showContactPage = false; ui.showInfoPanel = false;" *ngIf="!ui.showNav">
         <div>&#x25B2;</div>
     </div>
     <div class="nav-button panel no-selec" id="nav-close" (click)="ui.showNav = false" *ngIf="ui.showNav">

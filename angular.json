@@ -123,5 +123,8 @@
             }
         }
     },
-    "defaultProject": "SolarSim2"
+    "defaultProject": "SolarSim2",
+    "cli": {
+        "analytics": false
+    }
 }
